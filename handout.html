@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เอกสารสรุปสาระสำคัญและใบงาน (Handout & Workbook) - AI สำหรับ อปท.</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Sarabun', 'sans-serif'],
+                        heading: ['Prompt', 'sans-serif'],
+                    },
+                    colors: {
+                        gov: {
+                            50: '#f0f5ff',
+                            100: '#e0eafc',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            800: '#1e3a8a',
+                            900: '#0f172a',
+                            gold: '#d97706',
+                            goldLight: '#fef3c7'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Prompt', sans-serif;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .a4-page {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+            }
+        }
+        .prompt-code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <!-- Floating Top Bar for Screen (Hidden when printed) -->
+    <div class="no-print fixed top-4 right-4 sm:right-8 z-50 flex items-center gap-2 bg-slate-900/90 backdrop-blur-md p-2 rounded-2xl shadow-2xl border border-slate-700">
+        <a href="trainer_guide.html" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-heading font-medium transition" title="เปิดคู่มือวิทยากร">
+            <i data-lucide="book-open-check" class="w-4 h-4 text-amber-400"></i>
+            <span>คู่มือวิทยากร</span>
+        </a>
+        <a href="slides.html" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-heading font-medium transition">
+            <i data-lucide="presentation" class="w-4 h-4 text-amber-400"></i>
+            <span>สไลด์ (Slides)</span>
+        </a>
+        <a href="ai.html" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-heading font-medium transition shadow-md shadow-blue-500/20">
+            <i data-lucide="laptop" class="w-4 h-4 text-blue-200"></i>
+            <span>ระบบฝึกปฏิบัติ (AI Hub)</span>
+        </a>
+        <button onclick="window.print()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-heading font-semibold transition shadow-md shadow-emerald-500/20">
+            <i data-lucide="printer" class="w-4 h-4"></i>
+            <span>พิมพ์ / PDF</span>
+        </button>
+    </div>
+
+    <!-- Handout Container (A4 Printable Layout) -->
+    <div class="a4-page max-w-4xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-200 p-8 sm:p-12 space-y-10">
+
+        <!-- Header Section -->
+        <header class="border-b-2 border-gov-800 pb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="space-y-1.5">
+                <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 rounded text-[11px] font-heading font-bold bg-gov-800 text-white tracking-wide">
+                        คู่มือประกอบการอบรม
+                    </span>
+                    <span class="text-xs text-slate-500 font-mono">AI for Local Government Workshop Handout</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-heading font-bold text-gov-900 leading-tight">
+                    การประยุกต์ใช้ AI เพื่อยกระดับการทำงานของ อปท.
+                </h1>
+                <p class="text-sm text-slate-600">
+                    คู่มือสรุปสาระสำคัญ (Cheatsheet) คลังคำสั่ง Prompt มาตรฐาน และใบงานแผนปฏิบัติการ 30 วัน
+                </p>
+            </div>
+            <div class="sm:text-right shrink-0 bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs text-slate-600 space-y-1">
+                <div><strong>หลักสูตร:</strong> อบรมเชิงปฏิบัติการ</div>
+                <div><strong>กลุ่มเป้าหมาย:</strong> บุคลากร อปท. ทุกสังกัด</div>
+                <div><strong>มาตรฐาน:</strong> ระเบียบสารบรรณ 2526 & PDPA</div>
+            </div>
+        </header>
+
+        <!-- Participant Information Block -->
+        <div class="p-4 rounded-xl bg-gov-50/70 border border-gov-100 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div class="flex items-center gap-2">
+                <span class="font-heading font-semibold text-gov-800 w-24">ชื่อ-นามสกุล:</span>
+                <span class="flex-1 border-b border-dashed border-gov-300 pb-0.5 text-slate-700">.......................................................................</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="font-heading font-semibold text-gov-800 w-24">ตำแหน่ง:</span>
+                <span class="flex-1 border-b border-dashed border-gov-300 pb-0.5 text-slate-700">.......................................................................</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="font-heading font-semibold text-gov-800 w-24">กอง/ฝ่าย:</span>
+                <span class="flex-1 border-b border-dashed border-gov-300 pb-0.5 text-slate-700">.......................................................................</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="font-heading font-semibold text-gov-800 w-24">เทศบาล/อบต.:</span>
+                <span class="flex-1 border-b border-dashed border-gov-300 pb-0.5 text-slate-700">.......................................................................</span>
+            </div>
+        </div>
+
+        <!-- Section 1: Standard Prompt Formula (RTCF) -->
+        <section class="space-y-4">
+            <div class="flex items-center gap-2 border-l-4 border-gov-800 pl-3">
+                <h2 class="text-lg font-heading font-bold text-gov-900">1. สูตรลัดการเขียน Prompt สำหรับงานราชการ (สูตร 4 องค์ประกอบ: RTCF)</h2>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+                การสื่อสารกับ AI ให้เข้าใจบริบทงานราชการไทย จำเป็นต้องระบุ 4 องค์ประกอบหลักให้ครบถ้วน เพื่อให้ได้ผลลัพธ์ที่ถูกต้องตามระเบียบสารบรรณ โดยไม่ต้องเสียเวลาสั่งแก้ซ้ำ
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="p-3.5 rounded-xl border border-slate-200 bg-white space-y-1.5 shadow-2xs">
+                    <div class="flex items-center gap-2 font-heading font-bold text-gov-800 text-sm">
+                        <span class="w-6 h-6 rounded bg-blue-100 text-blue-700 flex items-center justify-center font-mono text-xs">R</span>
+                        <span>บทบาท (Role)</span>
+                    </div>
+                    <p class="text-xs text-slate-600">ระบุตำแหน่งและหน่วยงาน เช่น <em>"คุณคือนักจัดการงานทั่วไปชำนาญการ สังกัดสำนักปลัด เทศบาล..."</em></p>
+                </div>
+
+                <div class="p-3.5 rounded-xl border border-slate-200 bg-white space-y-1.5 shadow-2xs">
+                    <div class="flex items-center gap-2 font-heading font-bold text-gov-800 text-sm">
+                        <span class="w-6 h-6 rounded bg-emerald-100 text-emerald-700 flex items-center justify-center font-mono text-xs">T</span>
+                        <span>งานที่ต้องการ (Task)</span>
+                    </div>
+                    <p class="text-xs text-slate-600">ระบุคำกริยาและงานที่ต้องการชัดเจน เช่น <em>"ร่างหนังสือภายนอกขอความอนุเคราะห์วิทยากร"</em></p>
+                </div>
+
+                <div class="p-3.5 rounded-xl border border-slate-200 bg-white space-y-1.5 shadow-2xs">
+                    <div class="flex items-center gap-2 font-heading font-bold text-gov-800 text-sm">
+                        <span class="w-6 h-6 rounded bg-amber-100 text-amber-700 flex items-center justify-center font-mono text-xs">C</span>
+                        <span>บริบทและข้อมูลสำคัญ (Context)</span>
+                    </div>
+                    <p class="text-xs text-slate-600">ใส่ข้อมูล วัน เวลา สถานที่ กลุ่มเป้าหมาย ผู้ลงนาม และงบประมาณรองรับ</p>
+                </div>
+
+                <div class="p-3.5 rounded-xl border border-slate-200 bg-white space-y-1.5 shadow-2xs">
+                    <div class="flex items-center gap-2 font-heading font-bold text-gov-800 text-sm">
+                        <span class="w-6 h-6 rounded bg-purple-100 text-purple-700 flex items-center justify-center font-mono text-xs">F</span>
+                        <span>รูปแบบภาษาและผลลัพธ์ (Format)</span>
+                    </div>
+                    <p class="text-xs text-slate-600">กำหนดตามระเบียบสารบรรณ 2526 เช่น <em>"แบ่งเหตุที่มีหนังสือไปและจุดประสงค์ คำลงท้ายขอแสดงความนับถือ"</em></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: 6 Types of Gov Documents Quick Guide -->
+        <section class="space-y-4">
+            <div class="flex items-center gap-2 border-l-4 border-gov-800 pl-3">
+                <h2 class="text-lg font-heading font-bold text-gov-900">2. สรุปประเภทหนังสือราชการ 6 ชนิด ตามระเบียบงานสารบรรณ พ.ศ. 2526</h2>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl border border-slate-200">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-800 font-heading border-b border-slate-200">
+                            <th class="p-3 font-semibold w-36">ประเภทหนังสือ</th>
+                            <th class="p-3 font-semibold w-48">ลักษณะการใช้งาน</th>
+                            <th class="p-3 font-semibold">รูปแบบกระดาษ & จุดสังเกต</th>
+                            <th class="p-3 font-semibold w-40">คำสำคัญในการสั่ง AI</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 text-slate-700">
+                        <tr>
+                            <td class="p-3 font-semibold text-gov-800">1. หนังสือภายนอก</td>
+                            <td class="p-3">ติดต่อระหว่างส่วนราชการ หรือหน่วยงาน/บุคคลภายนอก</td>
+                            <td class="p-3">กระดาษตราครุฑ (สูง 3 ซม.) ลงนามโดยนายกเทศมนตรี/นายก อบต.</td>
+                            <td class="p-3 font-mono text-[11px] text-blue-700">ร่างหนังสือภายนอก ตราครุฑ คำลงท้ายขอแสดงความนับถือ</td>
+                        </tr>
+                        <tr class="bg-slate-50/50">
+                            <td class="p-3 font-semibold text-gov-800">2. หนังสือภายใน</td>
+                            <td class="p-3">ติดต่อภายในกระทรวง กรม จังหวัด หรือภายใน อปท. เดียวกัน</td>
+                            <td class="p-3">กระดาษบันทึกข้อความ (ครุฑ 1.5 ซม.) พิธีการน้อยกว่า</td>
+                            <td class="p-3 font-mono text-[11px] text-blue-700">ร่างบันทึกข้อความ 3 ส่วน (ต้นเรื่อง/ข้อเท็จจริง/ข้อเสนอ)</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 font-semibold text-gov-800">3. หนังสือประทับตรา</td>
+                            <td class="p-3">ใช้ประทับตราแทนการลงชื่อในเรื่องที่ไม่สำคัญมาก</td>
+                            <td class="p-3">ใช้กระดาษตราครุฑ ไม่มีการลงลายมือชื่อ หัวหน้าส่วนราชการระดับกอง/สำนักประทับตรา</td>
+                            <td class="p-3 font-mono text-[11px] text-blue-700">ร่างหนังสือประทับตรา ส่งเอกสาร/แจ้งเตือน/ขอรายละเอียดเพิ่ม</td>
+                        </tr>
+                        <tr class="bg-slate-50/50">
+                            <td class="p-3 font-semibold text-gov-800">4. หนังสือสั่งการ</td>
+                            <td class="p-3">คำสั่ง, ข้อบังคับ, ระเบียบ</td>
+                            <td class="p-3">ผู้มีอำนาจสั่งการให้ปฏิบัติโดยชอบด้วยกฎหมาย</td>
+                            <td class="p-3 font-mono text-[11px] text-blue-700">ร่างคำสั่งเทศบาล แต่งตั้งคณะทำงาน อ้างอำนาจตามกฎหมาย</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 font-semibold text-gov-800">5. หนังสือประชาสัมพันธ์</td>
+                            <td class="p-3">ประกาศ, แถลงการณ์, ข่าว</td>
+                            <td class="p-3">ชี้แจงให้ทราบ กำหนดแนวทาง หรือเผยแพร่แก่สาธารณชน</td>
+                            <td class="p-3 font-mono text-[11px] text-blue-700">ร่างประกาศเทศบาล / ข่าวประชาสัมพันธ์สื่อสารประชาชน</td>
+                        </tr>
+                        <tr class="bg-slate-50/50">
+                            <td class="p-3 font-semibold text-gov-800">6. หนังสือที่ จนท. ทำขึ้น</td>
+                            <td class="p-3">หนังสือรับรอง, รายงานการประชุม, บันทึก</td>
+                            <td class="p-3">จัดทำไว้เป็นหลักฐานในราชการ</td>
+                            <td class="p-3 font-mono text-[11px] text-blue-700">ร่างรายงานการประชุมสภาเทศบาล วาระที่ 1 ถึง 5 และมติ</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Page Break for Print -->
+        <div class="page-break"></div>
+
+        <!-- Section 3: Prompt Library by Local Government Departments -->
+        <section class="space-y-4">
+            <div class="flex items-center gap-2 border-l-4 border-gov-800 pl-3">
+                <h2 class="text-lg font-heading font-bold text-gov-900">3. คลังคำสั่ง Prompt มาตรฐานแยกตามกอง/ฝ่าย (Prompt Cheatsheet)</h2>
+            </div>
+            <p class="text-xs text-slate-600">
+                สามารถนำแม่แบบเหล่านี้ไปปรับเปลี่ยนข้อมูลในวงเล็บ <code>[...]</code> และนำไปสั่งใน ChatGPT, Gemini หรือ Claude ได้ทันที
+            </p>
+
+            <div class="space-y-3">
+                <!-- Card 1: สำนักปลัด -->
+                <div class="p-4 rounded-xl border border-slate-200 bg-white space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-heading font-bold text-gov-800 text-xs sm:text-sm flex items-center gap-1.5">
+                            <i data-lucide="folder" class="w-4 h-4 text-blue-600"></i> สำนักปลัด: ร่างหนังสือขอความอนุเคราะห์วิทยากร
+                        </span>
+                        <span class="text-[11px] px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-mono">หนังสือภายนอก</span>
+                    </div>
+                    <div class="p-3 rounded-lg bg-slate-900 text-slate-200 text-xs font-mono leading-relaxed">
+บทบาท: นักจัดการงานทั่วไปชำนาญการ สังกัดสำนักปลัด [เทศบาลตำบลเมืองใหม่]<br>
+งาน: ร่างหนังสือราชการภายนอก (ใช้กระดาษตราครุฑ) ถึง [อธิการบดีมหาวิทยาลัย...]<br>
+ข้อมูล: ขอความอนุเคราะห์วิทยากรบรรยายโครงการ [การประยุกต์ใช้ AI ในงาน อปท.] ในวันที่ [15 พ.ย. 69 เวลา 09.00-16.00 น.] ณ [ห้องประชุมเทศบาล] ผู้เข้าอบรม [50 คน] ผู้ลงนามคือ [นายกเทศมนตรี]<br>
+รูปแบบ: ภาษาราชการตามระเบียบสารบรรณ 2526 แบ่ง 3 ส่วน: 1.เหตุที่มีหนังสือไป 2.จุดประสงค์และความจำเป็น 3.คำลงท้ายขอแสดงความนับถือ
+                    </div>
+                </div>
+
+                <!-- Card 2: กองคลัง -->
+                <div class="p-4 rounded-xl border border-slate-200 bg-white space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-heading font-bold text-gov-800 text-xs sm:text-sm flex items-center gap-1.5">
+                            <i data-lucide="dollar-sign" class="w-4 h-4 text-emerald-600"></i> กองคลัง / รายได้: สรุปหนังสือเวียน สถ. สู่ Executive Summary
+                        </span>
+                        <span class="text-[11px] px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-mono">งานระเบียบ & นโยบาย</span>
+                    </div>
+                    <div class="p-3 rounded-lg bg-slate-900 text-slate-200 text-xs font-mono leading-relaxed">
+บทบาท: นิติกร / นักวิชาการเงินและบัญชีชำนาญการ กองคลัง<br>
+งาน: สรุปสาระสำคัญจากหนังสือเวียน สถ. [แนบไฟล์/ข้อความ] ให้เป็นบทสรุปผู้บริหารความยาวไม่เกิน 1 หน้า A4<br>
+รูปแบบผลลัพธ์: 1.เลขที่และวันที่บังคับใช้ 2.ที่มาโดยย่อ 3.จุดที่เปลี่ยนแปลงจากแนวปฏิบัติเดิม 4.Checklist สิ่งที่ อปท. ต้องดำเนินการ พร้อมฝ่ายที่รับผิดชอบและกำหนดส่ง 5.ข้อพึงระวังทางกฎหมาย
+                    </div>
+                </div>
+
+                <!-- Card 3: กองช่าง / ปชส. -->
+                <div class="p-4 rounded-xl border border-slate-200 bg-white space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-heading font-bold text-gov-800 text-xs sm:text-sm flex items-center gap-1.5">
+                            <i data-lucide="message-square" class="w-4 h-4 text-purple-600"></i> ประชาสัมพันธ์ / กองช่าง: ตอบกลับข้อร้องเรียนประชาชนทางสื่อออนไลน์
+                        </span>
+                        <span class="text-[11px] px-2 py-0.5 rounded bg-purple-50 text-purple-700 font-mono">Citizen Service</span>
+                    </div>
+                    <div class="p-3 rounded-lg bg-slate-900 text-slate-200 text-xs font-mono leading-relaxed">
+บทบาท: แอดมินเพจเทศบาล ร่วมกับกองช่าง<br>
+งาน: ร่างข้อความตอบกลับประชาชนที่แจ้งเรื่อง [ไฟกิ่งดับในซอย 5 หมู่ 2] ทาง Facebook<br>
+ข้อมูล: ส่งเรื่องต่อให้ทีมไฟฟ้าแล้ว ออกตรวจสอบพรุ่งนี้บ่าย เบอร์ติดต่อฉุกเฉิน [053-XXXXXX ต่อ 14]<br>
+รูปแบบ: ภาษาเป็นมิตร แสดงความเห็นอกเห็นใจ (Empathy) ระบุรหัสติดตามคำร้อง และกำหนดเวลาเข้าตรวจสอบที่แน่นอน
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Ethics, PDPA & Security -->
+        <section class="space-y-4">
+            <div class="flex items-center gap-2 border-l-4 border-gov-800 pl-3">
+                <h2 class="text-lg font-heading font-bold text-gov-900">4. ข้อพึงระวังด้านความปลอดภัย กฎหมาย PDPA และจริยธรรม AI ราชการ</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 rounded-xl border border-emerald-200 bg-emerald-50/50 space-y-2">
+                    <h3 class="font-heading font-bold text-emerald-800 text-xs sm:text-sm flex items-center gap-1.5">
+                        <i data-lucide="check-circle-2" class="w-4 h-4"></i> กฎ 3 Dos (สิ่งที่ต้องทำเสมอ)
+                    </h3>
+                    <ul class="text-xs text-slate-700 space-y-1.5 list-disc pl-4">
+                        <li><strong>Do Verify Facts:</strong> ตรวจสอบความถูกต้องของเลขที่หนังสือ วันที่ และมาตรากฎหมายทุกครั้ง (ป้องกัน AI หลอน)</li>
+                        <li><strong>Do Anonymize:</strong> ลบชื่อ นามสกุล เลขบัตร 13 หลัก ข้อมูลสุขภาพ หรือเบอร์โทรศัพท์ประชาชนออกก่อนเสมอ</li>
+                        <li><strong>Do Keep Human Control:</strong> เจ้าหน้าที่และผู้ลงนามเป็นผู้รับผิดชอบตามกฎหมาย 100% เสมอ</li>
+                    </ul>
+                </div>
+
+                <div class="p-4 rounded-xl border border-rose-200 bg-rose-50/50 space-y-2">
+                    <h3 class="font-heading font-bold text-rose-800 text-xs sm:text-sm flex items-center gap-1.5">
+                        <i data-lucide="alert-octagon" class="w-4 h-4"></i> กฎ 3 Don'ts (สิ่งที่ไม่ควรทำเด็ดขาด)
+                    </h3>
+                    <ul class="text-xs text-slate-700 space-y-1.5 list-disc pl-4">
+                        <li><strong>Don't Upload Secrets:</strong> ห้ามอัปโหลดเอกสารชั้น ลับ, ลับมาก, ลับที่สุด หรือราคากลางก่อนเปิดซองลงใน AI สาธารณะ</li>
+                        <li><strong>Don't Blindly Trust:</strong> ห้ามเชื่อตัวเลขงบประมาณและการคำนวณภาษีของ AI โดยไม่ตรวจสอบซ้ำด้วยเครื่องคิดเลข</li>
+                        <li><strong>Don't Replace Discretion:</strong> ห้ามให้ AI ตัดสินใจแทนการใช้ดุลพินิจของผู้บริหารตามกฎหมาย</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Page Break for Print -->
+        <div class="page-break"></div>
+
+        <!-- Section 5: Workshop Action Plan Worksheet -->
+        <section class="space-y-4">
+            <div class="flex items-center gap-2 border-l-4 border-gov-800 pl-3">
+                <h2 class="text-lg font-heading font-bold text-gov-900">5. ใบงานฝึกปฏิบัติ: แผนการนำ AI ไปใช้จริงใน 30 วัน (Action Plan Worksheet)</h2>
+            </div>
+            <p class="text-xs text-slate-600">
+                ให้ผู้เข้าอบรมเลือกภารกิจในกอง/ฝ่ายของตนที่ใช้เวลามากที่สุด 1-2 ภารกิจ เพื่อวางกรอบเวลาการนำ AI มาช่วยปฏิบัติงานจริง
+            </p>
+
+            <div class="space-y-4">
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-2">
+                    <div class="font-heading font-semibold text-gov-800">ภารกิจประจำที่เลือกนำ AI มาช่วย:</div>
+                    <div class="border-b border-dashed border-slate-400 pb-1 text-slate-600">1) ............................................................................................................................................................</div>
+                    <div class="border-b border-dashed border-slate-400 pb-1 text-slate-600">2) ............................................................................................................................................................</div>
+                </div>
+
+                <div class="overflow-x-auto rounded-xl border border-slate-200">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-800 font-heading border-b border-slate-200">
+                                <th class="p-3 font-semibold w-28">ช่วงเวลา</th>
+                                <th class="p-3 font-semibold">กิจกรรมที่ต้องดำเนินการ (Action Items)</th>
+                                <th class="p-3 font-semibold w-40">ผลลัพธ์ที่คาดหวัง / KPI</th>
+                                <th class="p-3 font-semibold w-24 text-center">สถานะ</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 text-slate-700">
+                            <tr>
+                                <td class="p-3 font-semibold text-gov-800">สัปดาห์ที่ 1<br><span class="text-[10px] text-slate-500 font-normal">(วันที่ 1-7)</span></td>
+                                <td class="p-3">
+                                    • รวบรวมเทมเพลต Prompt หนังสือราชการ 6 ชนิด ประจำกอง<br>
+                                    • ทดลองใช้ AI ช่วยร่างบันทึกข้อความและหนังสือขอความอนุเคราะห์ 2-3 ฉบับ
+                                </td>
+                                <td class="p-3 text-slate-600">ได้คลัง Prompt ประจำโต๊ะทำงาน</td>
+                                <td class="p-3 text-center text-slate-400">[ ] พร้อมเริ่ม</td>
+                            </tr>
+                            <tr class="bg-slate-50/50">
+                                <td class="p-3 font-semibold text-gov-800">สัปดาห์ที่ 2<br><span class="text-[10px] text-slate-500 font-normal">(วันที่ 8-14)</span></td>
+                                <td class="p-3">
+                                    • ทดลองใช้ AI สรุปหนังสือเวียน สถ. เป็น Executive Summary 1 หน้า<br>
+                                    • ตรวจสอบข้อมูลก่อนส่งต่อผู้บริหารตามหลัก PDPA Check
+                                </td>
+                                <td class="p-3 text-slate-600">ลดเวลาอ่านเอกสารลง 50%</td>
+                                <td class="p-3 text-center text-slate-400">[ ] อยู่ระหว่างทำ</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-gov-800">สัปดาห์ที่ 3<br><span class="text-[10px] text-slate-500 font-normal">(วันที่ 15-21)</span></td>
+                                <td class="p-3">
+                                    • ปรับปรุงโพสต์ประชาสัมพันธ์หน้าเพจเทศบาล/อบต. ให้กระชับ น่าอ่าน<br>
+                                    • นำ AI ช่วยร่างคำตอบรับข้อร้องเรียนประชาชนทางออนไลน์
+                                </td>
+                                <td class="p-3 text-slate-600">การสื่อสารเป็นมิตร ได้รับคำชม</td>
+                                <td class="p-3 text-center text-slate-400">[ ] อยู่ระหว่างทำ</td>
+                            </tr>
+                            <tr class="bg-slate-50/50">
+                                <td class="p-3 font-semibold text-gov-800">สัปดาห์ที่ 4<br><span class="text-[10px] text-slate-500 font-normal">(วันที่ 22-30)</span></td>
+                                <td class="p-3">
+                                    • ประเมินผลความพึงพอใจและเวลาที่ประหยัดได้ในรอบ 1 เดือน<br>
+                                    • ขยายผลและแบ่งปัน Prompt ที่มีประสิทธิภาพแก่เพื่อนร่วมงานในกอง
+                                </td>
+                                <td class="p-3 text-slate-600">สรุปผลรายงานปลัด/นายก</td>
+                                <td class="p-3 text-center text-slate-400">[ ] บรรลุเป้าหมาย</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="p-4 rounded-xl bg-gov-50/60 border border-gov-100 flex items-center justify-between text-xs text-gov-900">
+                    <div class="space-y-0.5">
+                        <span class="font-heading font-semibold">ลงชื่อผู้จัดทำแผน:</span> ........................................................................
+                    </div>
+                    <div class="space-y-0.5">
+                        <span class="font-heading font-semibold">วันที่:</span> .......... / .......... / ....................
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="border-t border-slate-200 pt-4 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2">
+            <span>หลักสูตรการประยุกต์ใช้ AI สำหรับองค์กรปกครองส่วนท้องถิ่น (อปท.)</span>
+            <div class="flex items-center gap-3 font-mono text-[11px]">
+                <span>สไลด์บรรยาย: slides.html</span>
+                <span>•</span>
+                <span>ระบบฝึกปฏิบัติ: ai.html</span>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        if (window.lucide) {
+            window.lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

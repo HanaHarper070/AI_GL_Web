@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบติดตามฐานข้อมูลผู้เข้าอบรม AI สำหรับ อปท. (4 รุ่น)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Sarabun', sans-serif; background: #f8fafc; }
+        h1, h2, h3, h4, .font-heading { font-family: 'Prompt', sans-serif; }
+    </style>
+</head>
+<body class="p-4 sm:p-8 text-slate-800">
+
+    <div class="max-w-7xl mx-auto space-y-6">
+        <!-- Top Bar -->
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center shadow-md">
+                    <i data-lucide="database" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-0.5 rounded-full text-xs font-heading font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">Live Database Monitor</span>
+                        <span class="text-xs text-slate-400">ระบบจำลองฐานข้อมูล 4 รุ่น</span>
+                    </div>
+                    <h1 class="text-xl sm:text-2xl font-heading font-bold text-slate-900 mt-0.5">
+                        ระบบติดตามฐานข้อมูลผู้เข้าอบรม AI อปท. (4 รุ่น)
+                    </h1>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <button onclick="refreshData()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-heading font-semibold rounded-xl flex items-center gap-1.5 transition shadow-xs">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                    <span>รีเฟรชข้อมูล</span>
+                </button>
+                <a href="ai.html" target="_blank" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-heading font-medium rounded-xl flex items-center gap-1.5 transition">
+                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                    <span>เปิดระบบฝึกปฏิบัติ (ai.html)</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- 4 Cohort Metric Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-4" id="stats-grid">
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+                <div class="text-xs font-heading text-slate-500">ยอดรวมทั้งหมด (4 รุ่น)</div>
+                <div id="stat-total" class="text-2xl font-bold font-heading text-blue-900 mt-1">0 คน</div>
+                <div class="text-[11px] text-slate-400 mt-0.5">เป้าหมาย 480-600 คน</div>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border border-blue-200 shadow-xs bg-blue-50/20">
+                <div class="text-xs font-heading text-blue-700">รุ่นที่ ๑</div>
+                <div id="stat-b1" class="text-2xl font-bold font-heading text-blue-950 mt-1">0 คน</div>
+                <div class="text-[11px] text-blue-600 mt-0.5">เป้าหมาย 120-150 คน</div>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border border-purple-200 shadow-xs bg-purple-50/20">
+                <div class="text-xs font-heading text-purple-700">รุ่นที่ ๒</div>
+                <div id="stat-b2" class="text-2xl font-bold font-heading text-purple-950 mt-1">0 คน</div>
+                <div class="text-[11px] text-purple-600 mt-0.5">เป้าหมาย 120-150 คน</div>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border border-amber-200 shadow-xs bg-amber-50/20">
+                <div class="text-xs font-heading text-amber-700">รุ่นที่ ๓</div>
+                <div id="stat-b3" class="text-2xl font-bold font-heading text-amber-950 mt-1">0 คน</div>
+                <div class="text-[11px] text-amber-600 mt-0.5">เป้าหมาย 120-150 คน</div>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border border-emerald-200 shadow-xs bg-emerald-50/20">
+                <div class="text-xs font-heading text-emerald-700">รุ่นที่ ๔</div>
+                <div id="stat-b4" class="text-2xl font-bold font-heading text-emerald-950 mt-1">0 คน</div>
+                <div class="text-[11px] text-emerald-600 mt-0.5">เป้าหมาย 120-150 คน</div>
+            </div>
+        </div>
+
+        <!-- Table View with Batch Tabs -->
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+            <!-- Tabs Bar -->
+            <div class="p-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3 bg-slate-50/60">
+                <div class="flex items-center gap-1.5 overflow-x-auto" id="batch-tabs">
+                    <button onclick="setTab('Master')" id="tab-Master" class="px-3.5 py-1.5 rounded-xl text-xs font-heading font-bold bg-slate-900 text-white transition">ภาพรวม 4 รุ่น (Master)</button>
+                    <button onclick="setTab('รุ่นที่ 1')" id="tab-b1" class="px-3.5 py-1.5 rounded-xl text-xs font-heading font-medium text-slate-600 hover:bg-slate-200 transition">รุ่นที่ ๑</button>
+                    <button onclick="setTab('รุ่นที่ 2')" id="tab-b2" class="px-3.5 py-1.5 rounded-xl text-xs font-heading font-medium text-slate-600 hover:bg-slate-200 transition">รุ่นที่ ๒</button>
+                    <button onclick="setTab('รุ่นที่ 3')" id="tab-b3" class="px-3.5 py-1.5 rounded-xl text-xs font-heading font-medium text-slate-600 hover:bg-slate-200 transition">รุ่นที่ ๓</button>
+                    <button onclick="setTab('รุ่นที่ 4')" id="tab-b4" class="px-3.5 py-1.5 rounded-xl text-xs font-heading font-medium text-slate-600 hover:bg-slate-200 transition">รุ่นที่ ๔</button>
+                </div>
+
+                <div class="text-xs text-slate-500 font-heading">
+                    แสดงผล: <span id="current-count" class="font-bold text-slate-800">0</span> รายการ
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-slate-900 text-white font-heading font-semibold">
+                            <th class="p-3.5">วัน-เวลาบันทึก</th>
+                            <th class="p-3.5">ชื่อ-นามสกุล</th>
+                            <th class="p-3.5">ตำแหน่ง</th>
+                            <th class="p-3.5">ฝ่าย/กอง</th>
+                            <th class="p-3.5">อปท. / หน่วยงาน</th>
+                            <th class="p-3.5 text-center">รุ่น</th>
+                            <th class="p-3.5 text-center">คะแนน Post-Test</th>
+                            <th class="p-3.5 text-center">สถานะ</th>
+                            <th class="p-3.5">รหัสเกียรติบัตร</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body" class="divide-y divide-slate-100 text-slate-700">
+                        <!-- Rendered by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let dbData = {
+            "Master": [],
+            "รุ่นที่ 1": [],
+            "รุ่นที่ 2": [],
+            "รุ่นที่ 3": [],
+            "รุ่นที่ 4": []
+        };
+        let currentTab = "Master";
+
+        async function refreshData() {
+            try {
+                const res = await fetch('live_workshop_database.json?t=' + Date.now());
+                if (res.ok) {
+                    dbData = await res.json();
+                }
+            } catch (e) {
+                console.log('Using local memory or direct server');
+            }
+            renderUI();
+        }
+
+        function setTab(tabName) {
+            currentTab = tabName;
+            document.querySelectorAll('#batch-tabs button').forEach(b => {
+                if (b.textContent.includes(tabName) || (tabName === 'Master' && b.textContent.includes('Master'))) {
+                    b.className = "px-3.5 py-1.5 rounded-xl text-xs font-heading font-bold bg-slate-900 text-white transition";
+                } else {
+                    b.className = "px-3.5 py-1.5 rounded-xl text-xs font-heading font-medium text-slate-600 hover:bg-slate-200 transition";
+                }
+            });
+            renderTable();
+        }
+
+        function renderUI() {
+            document.getElementById('stat-total').textContent = `${(dbData["Master"] || []).length} คน`;
+            document.getElementById('stat-b1').textContent = `${(dbData["รุ่นที่ 1"] || []).length} คน`;
+            document.getElementById('stat-b2').textContent = `${(dbData["รุ่นที่ 2"] || []).length} คน`;
+            document.getElementById('stat-b3').textContent = `${(dbData["รุ่นที่ 3"] || []).length} คน`;
+            document.getElementById('stat-b4').textContent = `${(dbData["รุ่นที่ 4"] || []).length} คน`;
+            renderTable();
+        }
+
+        function renderTable() {
+            const list = dbData[currentTab] || [];
+            document.getElementById('current-count').textContent = list.length;
+            const tbody = document.getElementById('table-body');
+            
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-slate-400 font-heading">ยังไม่มีข้อมูลในรุ่นนี้ (ส่งข้อมูลจาก ai.html ได้ทันที)</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = list.map((item, idx) => `
+                <tr class="hover:bg-blue-50/50 transition">
+                    <td class="p-3 text-slate-500 whitespace-nowrap">${item.timestamp}</td>
+                    <td class="p-3 font-heading font-semibold text-slate-900 whitespace-nowrap">${item.fullName}</td>
+                    <td class="p-3">${item.position}</td>
+                    <td class="p-3 text-slate-500">${item.department}</td>
+                    <td class="p-3 font-medium">${item.organization}</td>
+                    <td class="p-3 text-center whitespace-nowrap"><span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[11px] font-bold">${item.batch}</span></td>
+                    <td class="p-3 text-center font-bold font-heading ${item.quizScore >= 4 ? 'text-emerald-700' : 'text-blue-700'}">${item.quizScore} / ${item.quizTotal || 5}</td>
+                    <td class="p-3 text-center whitespace-nowrap"><span class="px-2 py-0.5 rounded-full ${item.quizPassed ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'} text-[11px] font-bold">${item.quizPassed ? 'ผ่านเกณฑ์' : 'ปรับปรุง'}</span></td>
+                    <td class="p-3 font-mono text-[11px] text-slate-500">${item.certificateId}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Auto refresh every 3 seconds
+        refreshData();
+        setInterval(refreshData, 3000);
+        lucide.createIcons();
+    </script>
+</body>
+</html>

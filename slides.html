@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="th" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สไลด์บรรยาย: การประยุกต์ใช้ AI เพื่อยกระดับการทำงานขององค์กรปกครองส่วนท้องถิ่น (อปท.)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Sarabun', 'sans-serif'],
+                        heading: ['Prompt', 'sans-serif'],
+                    },
+                    colors: {
+                        gov: {
+                            50: '#f0f5ff',
+                            100: '#e0eafc',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            800: '#1e3a8a',
+                            900: '#0f172a',
+                            gold: '#d97706',
+                            goldLight: '#fef3c7'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            user-select: none;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        h1, h2, h3, h4, h5, .font-heading {
+            font-family: 'Prompt', sans-serif;
+        }
+        
+        /* Laser pointer styling */
+        #laser-pointer {
+            pointer-events: none;
+            position: fixed;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(239, 68, 68, 1) 0%, rgba(239, 68, 68, 0.4) 60%, rgba(239, 68, 68, 0) 100%);
+            box-shadow: 0 0 16px 6px rgba(239, 68, 68, 0.8);
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            display: none;
+        }
+
+        /* Blank screen overlay */
+        #blank-screen-overlay {
+            position: fixed;
+            inset: 0;
+            background: #000000;
+            z-index: 9998;
+            display: none;
+            cursor: pointer;
+        }
+
+        /* Transitions */
+        .slide-fade {
+            animation: fadeIn 0.25s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.2);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+</head>
+<body id="app-body" class="h-full bg-slate-950 text-slate-100 flex flex-col justify-between overflow-hidden">
+
+    <!-- Digital Laser Pointer Element -->
+    <div id="laser-pointer"></div>
+
+    <!-- Blank Screen Overlay (Press 'B' to toggle) -->
+    <div id="blank-screen-overlay" onclick="toggleBlankScreen()" class="items-center justify-center">
+        <div class="text-slate-600 text-sm font-mono flex items-center gap-2">
+            <span>[โหมดพักหน้าจอ] กดแป้นพิมพ์ B หรือคลิกหน้าจอเพื่อกลับสู่สไลด์</span>
+        </div>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <header id="top-nav" class="h-16 bg-slate-900/95 border-b border-slate-800 px-4 sm:px-6 flex items-center justify-between shrink-0 z-30 backdrop-blur-md">
+        <!-- Brand / Title -->
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center shadow-md shadow-blue-500/20 text-white font-heading font-extrabold text-base">
+                AI
+            </div>
+            <div>
+                <span class="font-heading font-bold text-base sm:text-lg text-white tracking-wide truncate block max-w-[220px] sm:max-w-md">
+                    การประยุกต์ใช้ AI สำหรับองค์กรปกครองส่วนท้องถิ่น (อปท.)
+                </span>
+                <span class="text-xs text-slate-400 hidden sm:block">สไลด์บรรยายเชิงปฏิบัติการ (Executive Presentation Deck)</span>
+            </div>
+        </div>
+
+        <!-- Links to Portal, Handout, Trainer Guide + Presentation Tools -->
+        <div class="flex items-center gap-2 sm:gap-3">
+            <!-- Link to Trainer Guide -->
+            <a href="trainer_guide.html" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-600/20 hover:bg-amber-600/40 text-amber-300 text-xs font-heading font-medium transition border border-amber-500/40" title="เปิดคู่มือวิทยากรและสคริปต์การสอน">
+                <i data-lucide="book-open-check" class="w-4 h-4 text-amber-400"></i>
+                <span class="hidden lg:inline">คู่มือวิทยากร</span>
+            </a>
+
+            <!-- Link to Handout -->
+            <a href="handout.html" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-heading font-medium transition border border-slate-700/60" title="เปิดเอกสารสรุป & ใบงานพิมพ์ A4">
+                <i data-lucide="file-text" class="w-4 h-4 text-emerald-400"></i>
+                <span class="hidden md:inline">เอกสารสรุป (Handout)</span>
+            </a>
+
+            <!-- Link to Interactive AI Platform -->
+            <a href="ai.html" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-heading font-medium transition shadow-md shadow-blue-600/20" title="เปิดระบบฝึกปฏิบัติ Interactive AI Hub">
+                <i data-lucide="laptop" class="w-4 h-4 text-blue-200"></i>
+                <span class="hidden md:inline">ระบบฝึกปฏิบัติ (AI Hub)</span>
+            </a>
+
+            <div class="h-5 w-px bg-slate-700/80 mx-1 hidden sm:block"></div>
+
+            <!-- Light / Dark Theme Toggle Button -->
+            <button onclick="toggleTheme()" id="btn-theme-toggle" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 hover:text-amber-300 transition border border-slate-700/80" title="สลับธีม สว่าง (สำหรับห้องประชุมเปิดไฟ) / มืด">
+                <i data-lucide="sun" class="w-4 h-4" id="theme-icon"></i>
+            </button>
+
+            <!-- Workshop Countdown Timer Toggle -->
+            <button onclick="toggleTimerWidget()" id="btn-timer-toggle" class="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-heading transition border border-slate-700/80" title="เปิดนาฬิกาจับเวลาฝึกปฏิบัติ (กด T)">
+                <i data-lucide="timer" class="w-4 h-4 text-blue-400"></i>
+                <span id="timer-display-btn" class="font-mono text-xs font-bold hidden sm:inline">จับเวลา</span>
+            </button>
+
+            <!-- Laser Pointer Toggle -->
+            <button onclick="toggleLaserPointer()" id="btn-laser-toggle" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition border border-slate-700/80" title="เปิดเลเซอร์พอยเตอร์ [กด L]">
+                <i data-lucide="target" class="w-4 h-4 text-rose-400"></i>
+            </button>
+
+            <!-- Speaker Notes Toggle -->
+            <button onclick="toggleNotes()" id="btn-toggle-notes" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition border border-slate-700/80" title="สลับบันทึกผู้บรรยาย [กด N]">
+                <i data-lucide="message-square" class="w-4 h-4"></i>
+            </button>
+
+            <!-- Overview Grid Toggle -->
+            <button onclick="toggleOverview()" id="btn-toggle-overview" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition border border-slate-700/80" title="ดูสารบัญสไลด์ทั้งหมด [กด O]">
+                <i data-lucide="grid" class="w-4 h-4"></i>
+            </button>
+
+            <!-- Fullscreen Toggle -->
+            <button onclick="toggleFullscreen()" id="btn-fullscreen" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition border border-slate-700/80" title="เต็มหน้าจอ [กด F]">
+                <i data-lucide="maximize" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Floating Timer Widget (Hidden by default, toggles on click) -->
+    <div id="timer-widget" class="fixed top-20 right-6 z-40 bg-slate-900 text-white rounded-2xl shadow-2xl border border-slate-700 p-4 w-72 hidden transition-all">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+            <span class="text-xs font-heading font-bold text-blue-400 uppercase tracking-wide flex items-center gap-1.5">
+                <i data-lucide="timer" class="w-4 h-4"></i> นาฬิกาจับเวลา Workshop
+            </span>
+            <button onclick="toggleTimerWidget()" class="text-slate-400 hover:text-white text-xs">✕</button>
+        </div>
+        <div class="py-3 text-center">
+            <div id="timer-digits" class="font-mono text-4xl font-extrabold text-amber-400 tracking-wider">05:00</div>
+            <div id="timer-status" class="text-[11px] text-slate-400 mt-1">พร้อมเริ่มกิจกรรม</div>
+        </div>
+        <div class="grid grid-cols-3 gap-1.5 mb-3 text-xs">
+            <button onclick="setTimerDuration(180)" class="py-1 px-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200">3 นาที</button>
+            <button onclick="setTimerDuration(300)" class="py-1 px-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200">5 นาที</button>
+            <button onclick="setTimerDuration(600)" class="py-1 px-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200">10 นาที</button>
+        </div>
+        <div class="flex items-center gap-2">
+            <button onclick="startPauseTimer()" id="btn-timer-action" class="flex-1 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 font-heading font-semibold text-xs text-white">
+                เริ่มจับเวลา
+            </button>
+            <button onclick="resetTimer()" class="py-1.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 font-heading text-xs text-slate-300">
+                รีเซ็ต
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Slide Stage (16:9 widescreen presentation area with larger typography) -->
+    <main class="flex-1 relative flex items-center justify-center p-3 sm:p-6 overflow-hidden">
+        <div id="slide-stage" class="w-full max-w-6xl aspect-[16/9] max-h-[82vh] bg-slate-900 rounded-3xl border border-slate-800 shadow-2xl relative overflow-hidden flex flex-col transition-colors duration-300">
+            
+            <!-- Slides Container (Injected by slides_app.js) -->
+            <div id="slides-wrapper" class="w-full h-full relative overflow-y-auto overflow-x-hidden flex flex-col slide-fade">
+                <!-- Slide content rendered here -->
+            </div>
+
+            <!-- Slide Notes Drawer (Hidden by default, toggle with 'N') -->
+            <div id="speaker-notes-drawer" class="hidden absolute bottom-0 inset-x-0 bg-slate-900/95 border-t border-amber-500/40 p-5 backdrop-blur-md z-30 transition-all max-h-52 overflow-y-auto shadow-2xl">
+                <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-800">
+                    <div class="flex items-center gap-2 text-amber-400 font-heading font-bold text-xs tracking-wide uppercase">
+                        <i data-lucide="bookmark" class="w-4 h-4"></i> บันทึกสำหรับผู้บรรยาย (Speaker Notes)
+                    </div>
+                    <button onclick="toggleNotes()" class="text-slate-400 hover:text-white text-xs font-mono">ปิด [N]</button>
+                </div>
+                <div id="speaker-notes-content" class="text-sm text-slate-200 leading-relaxed font-sans"></div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Document Preview Modal (Opens when user clicks [คลิกดูตัวอย่างฉบับเต็ม]) -->
+    <div id="doc-preview-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4 sm:p-6">
+        <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+            <!-- Modal Header -->
+            <div class="p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between bg-slate-950/50">
+                <div class="space-y-0.5">
+                    <h3 id="preview-modal-title" class="text-base sm:text-lg font-heading font-bold text-white">ตัวอย่างเอกสารราชการจริง</h3>
+                    <p id="preview-modal-subtitle" class="text-xs text-blue-300">จำลองผลลัพธ์ที่ได้จากการสั่ง AI</p>
+                </div>
+                <button onclick="closeDocPreview()" aria-label="ปิดหน้าต่างตัวอย่างเอกสาร" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <!-- Modal Body (Injected by JS) -->
+            <div id="preview-modal-body" class="flex-1 overflow-y-auto p-4 sm:p-8 bg-slate-800/50">
+                <!-- Injected Document -->
+            </div>
+            <!-- Modal Footer -->
+            <div class="p-3 border-t border-slate-800 flex items-center justify-between bg-slate-950/60 text-xs text-slate-400">
+                <span>กดปุ่ม ESC หรือคลิกปุ่มปิด เพื่อกลับสู่หน้าจอการบรรยาย</span>
+                <button onclick="closeDocPreview()" class="px-4 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-heading font-medium">
+                    ปิดหน้าต่าง
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide Overview Modal (Grid of all slides) -->
+    <div id="overview-modal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md hidden flex flex-col p-6">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800 max-w-6xl w-full mx-auto">
+            <div class="flex items-center gap-2">
+                <i data-lucide="grid" class="w-5 h-5 text-blue-400"></i>
+                <h3 class="text-lg font-heading font-bold text-white">สารบัญสไลด์ทั้งหมด (Slide Overview)</h3>
+            </div>
+            <button onclick="toggleOverview()" aria-label="ปิดหน้าต่างสารบัญสไลด์" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+        <div class="flex-1 overflow-y-auto max-w-6xl w-full mx-auto py-6">
+            <div id="overview-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5">
+                <!-- Rendered by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Controls & Progress Bar -->
+    <footer id="bottom-bar" class="h-16 bg-slate-900/95 border-t border-slate-800 px-4 sm:px-6 flex items-center justify-between shrink-0 z-30">
+        <!-- Left: Current module label -->
+        <div class="flex items-center gap-2 text-xs sm:text-sm font-heading text-slate-400 truncate max-w-[200px] sm:max-w-md">
+            <span id="current-module-tag" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-900/60 text-blue-300 border border-blue-700/50">Module</span>
+            <span id="current-slide-title" class="truncate text-slate-200 font-medium">Title</span>
+        </div>
+
+        <!-- Center: Slide Navigation Buttons -->
+        <div class="flex items-center gap-3">
+            <button onclick="prevSlide()" id="btn-prev" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs sm:text-sm font-heading font-medium transition disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700/60 shadow-xs">
+                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                <span class="hidden sm:inline">ก่อนหน้า</span>
+            </button>
+
+            <!-- Counter -->
+            <div class="flex items-center gap-1 font-heading text-sm font-bold px-2 text-slate-300">
+                <span id="slide-current-num" class="text-blue-400 text-base">1</span>
+                <span class="text-slate-600">/</span>
+                <span id="slide-total-num" class="text-slate-400">29</span>
+            </div>
+
+            <button onclick="nextSlide()" id="btn-next" class="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-heading font-semibold transition shadow-md shadow-blue-600/20 disabled:opacity-40 disabled:cursor-not-allowed">
+                <span class="hidden sm:inline">ถัดไป</span>
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <!-- Right: Progress Bar & Keyboard tip -->
+        <div class="flex items-center gap-3">
+            <span class="text-xs text-slate-400 hidden lg:inline font-mono">ใช้ปุ่ม ◀ ▶, Space, L (เลเซอร์), B (พักจอ)</span>
+            <div class="w-28 sm:w-36 h-2.5 bg-slate-800 rounded-full overflow-hidden border border-slate-700/60">
+                <div id="slide-progress-bar" class="h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-amber-500 transition-all duration-300" style="width: 4%;"></div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification for Copying -->
+    <div id="toast" class="fixed bottom-20 right-6 z-50 transform translate-y-12 opacity-0 transition-all duration-300 flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-slate-800 text-white border border-blue-500/50 shadow-2xl pointer-events-none">
+        <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i>
+        <span id="toast-message" class="text-xs sm:text-sm font-medium">คัดลอกคำสั่งเรียบร้อยแล้ว</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="document_previews.js"></script>
+    <script src="slides_data.js"></script>
+    <script src="slides_app.js"></script>
+</body>
+</html>

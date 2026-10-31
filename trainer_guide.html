@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คู่มือวิทยากร (Trainer & Facilitator Guide) - AI สำหรับ อปท.</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Sarabun', 'sans-serif'],
+                        heading: ['Prompt', 'sans-serif'],
+                    },
+                    colors: {
+                        gov: {
+                            50: '#f0f5ff',
+                            100: '#e0eafc',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            800: '#1e3a8a',
+                            900: '#0f172a',
+                            gold: '#d97706',
+                            goldLight: '#fef3c7'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Prompt', sans-serif;
+        }
+        .script-box {
+            background-color: #f0fdf4;
+            border-left: 4px solid #16a34a;
+        }
+        .question-box {
+            background-color: #eff6ff;
+            border-left: 4px solid #2563eb;
+        }
+        .pitfall-box {
+            background-color: #fff1f2;
+            border-left: 4px solid #e11d48;
+        }
+        .tip-box {
+            background-color: #fefce8;
+            border-left: 4px solid #ca8a04;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .sidebar-nav {
+                display: none !important;
+            }
+            .main-content {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- Top Sticky Header -->
+    <header class="no-print sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white px-4 sm:px-8 py-3 flex items-center justify-between shadow-md">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center text-slate-950 font-bold shadow-md shadow-amber-500/20">
+                <i data-lucide="book-open-check" class="w-5 h-5 text-slate-950"></i>
+            </div>
+            <div>
+                <span class="font-heading font-bold text-sm sm:text-base text-white flex items-center gap-2">
+                    คู่มือวิทยากรและผู้ช่วยสอน (Trainer & Facilitator Guide)
+                    <span class="hidden md:inline text-[11px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-normal">สำหรับผู้สอน</span>
+                </span>
+                <span class="text-[11px] text-slate-400 hidden sm:block">การประยุกต์ใช้ AI เพื่อยกระดับการทำงานขององค์กรปกครองส่วนท้องถิ่น (อปท.)</span>
+            </div>
+        </div>
+
+        <!-- Action Links -->
+        <div class="flex items-center gap-2 sm:gap-3">
+            <a href="slides.html" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-heading font-medium transition border border-slate-700">
+                <i data-lucide="presentation" class="w-4 h-4 text-amber-400"></i>
+                <span class="hidden lg:inline">สไลด์บรรยาย</span>
+            </a>
+            <a href="handout.html" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-heading font-medium transition border border-slate-700">
+                <i data-lucide="file-text" class="w-4 h-4 text-emerald-400"></i>
+                <span class="hidden lg:inline">เอกสาร Handout</span>
+            </a>
+            <a href="ai.html" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-heading font-medium transition shadow-sm">
+                <i data-lucide="laptop" class="w-4 h-4 text-blue-200"></i>
+                <span class="hidden lg:inline">ระบบฝึกปฏิบัติ</span>
+            </a>
+            <button onclick="window.print()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-heading font-semibold transition shadow-md shadow-emerald-500/20">
+                <i data-lucide="printer" class="w-4 h-4"></i>
+                <span class="hidden sm:inline">พิมพ์คู่มือ</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container Layout -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full flex flex-col lg:flex-row gap-8 items-start">
+
+        <!-- Sidebar Navigation (Sticky) -->
+        <aside class="sidebar-nav no-print w-full lg:w-72 bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sticky top-20 shrink-0 space-y-3">
+            <div class="text-xs font-heading font-bold uppercase tracking-wider text-slate-400 px-2">สารบัญคู่มือวิทยากร</div>
+            <nav class="space-y-1 text-xs">
+                <a href="#prep" class="flex items-center gap-2 px-3 py-2 rounded-xl text-slate-700 hover:bg-blue-50 hover:text-blue-700 font-medium transition">
+                    <i data-lucide="check-circle-2" class="w-4 h-4 text-blue-500"></i> 1. การเตรียมการ & จัดห้อง
+                </a>
+                <a href="#schedule" class="flex items-center gap-2 px-3 py-2 rounded-xl text-slate-700 hover:bg-blue-50 hover:text-blue-700 font-medium transition">
+                    <i data-lucide="clock" class="w-4 h-4 text-amber-500"></i> 2. กำหนดการละเอียด 1 วัน
+                </a>
+                <a href="#scripts" class="flex items-center gap-2 px-3 py-2 rounded-xl text-slate-700 hover:bg-blue-50 hover:text-blue-700 font-medium transition">
+                    <i data-lucide="message-square-text" class="w-4 h-4 text-emerald-500"></i> 3. สคริปต์การสอน 7 โมดูล
+                </a>
+                <a href="#coaching" class="flex items-center gap-2 px-3 py-2 rounded-xl text-slate-700 hover:bg-blue-50 hover:text-blue-700 font-medium transition">
+                    <i data-lucide="compass" class="w-4 h-4 text-purple-500"></i> 4. คู่มือโค้ชชิ่งหน้างาน
+                </a>
+                <a href="#solutions" class="flex items-center gap-2 px-3 py-2 rounded-xl text-slate-700 hover:bg-blue-50 hover:text-blue-700 font-medium transition">
+                    <i data-lucide="award" class="w-4 h-4 text-rose-500"></i> 5. เฉลย & เกณฑ์ประเมิน Rubrics
+                </a>
+            </nav>
+
+            <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-amber-900 leading-relaxed">
+                <strong>คำแนะนำ:</strong> ในขณะบรรยาย ให้เปิดสไลด์ <a href="slides.html" target="_blank" rel="noopener noreferrer" class="underline font-semibold">slides.html</a> บนจอโปรเจกเตอร์ แล้วใช้หน้านี้บนแท็บเล็ต/โน้ตบุ๊กคู่โต๊ะวิทยากร
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content flex-1 w-full min-w-0 space-y-10 bg-white p-6 sm:p-10 rounded-2xl border border-slate-200 shadow-sm">
+
+            <!-- Header Section -->
+            <div class="border-b border-slate-200 pb-6 space-y-2">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-heading font-semibold bg-blue-100 text-blue-800">
+                    <i data-lucide="shield" class="w-3.5 h-3.5"></i> เอกสารเฉพาะวิทยากรและคณะทำงาน
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-heading font-bold text-slate-900 leading-tight">
+                    คู่มือวิทยากร: แผนการสอน สคริปต์บรรยาย และเกณฑ์ประเมินเชิงปฏิบัติการ
+                </h1>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    คู่มือเล่มนี้ออกแบบมาเพื่อให้วิทยากรและทีมผู้ช่วยสอน (Teaching Assistants: TAs) สามารถนำพาผู้เข้าอบรมจากเทศบาลและ อบต. ให้เข้าใจและประยุกต์ใช้ AI ได้อย่างมั่นใจ ถูกระเบียบสารบรรณ และปลอดภัยตามกฎหมาย PDPA
+                </p>
+            </div>
+
+            <!-- Section 1: Preparation & Classroom Setup -->
+            <section id="prep" class="space-y-4">
+                <div class="flex items-center gap-2 border-l-4 border-gov-800 pl-3">
+                    <h2 class="text-xl font-heading font-bold text-slate-900">1. การเตรียมความพร้อมและผังห้องอบรม (Preparation Checklist)</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-2.5">
+                        <h4 class="font-heading font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <i data-lucide="laptop" class="w-4 h-4 text-blue-600"></i> อุปกรณ์และระบบเครือข่าย
+                        </h4>
+                        <ul class="space-y-1.5 text-slate-600">
+                            <li>• <strong>คอมพิวเตอร์ผู้เรียน:</strong> โน้ตบุ๊ก 1 เครื่องต่อคน (หรืออย่างน้อย 1 เครื่องต่อ 2 คน)</li>
+                            <li>• <strong>อินเทอร์เน็ต:</strong> Wi-Fi ความเร็วสูง รองรับการเชื่อมต่อพร้อมกัน 50-80 อุปกรณ์</li>
+                            <li>• <strong>ปลั๊กพ่วง:</strong> วางประจำทุกโต๊ะกลุ่มละ 1-2 จุด</li>
+                            <li>• <strong>บัญชี AI:</strong> แจ้งผู้เรียนสมัครบัญชี Google (สำหรับเข้า Gemini) หรือ OpenAI/Claude ล่วงหน้า 1 วัน</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-2.5">
+                        <h4 class="font-heading font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <i data-lucide="users" class="w-4 h-4 text-emerald-600"></i> การจัดกลุ่มโต๊ะ (Cluster Seating)
+                        </h4>
+                        <ul class="space-y-1.5 text-slate-600">
+                            <li>• <strong>จัดโต๊ะกลุ่ม (Island Style):</strong> กลุ่มละ 6-8 คน เพื่อให้ปรึกษากันได้สะดวก</li>
+                            <li>• <strong>แบ่งตามกอง/ภารกิจ:</strong> จัดผู้เรียนที่มีสายงานใกล้เคียงกันนั่งด้วยกัน เช่น โต๊ะสำนักปลัด, โต๊ะกองคลัง, โต๊ะกองช่าง, โต๊ะกองสาธารณสุข</li>
+                            <li>• <strong>ผู้ช่วยวิทยากร (TA):</strong> วาง TA 1 คน ดูแล 2 โต๊ะ เพื่อคอยช่วยเหลือผู้ที่ติดปัญหาการเข้าใช้ระบบ</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Master Schedule -->
+            <section id="schedule" class="space-y-4">
+                <div class="flex items-center gap-2 border-l-4 border-gov-800 pl-3">
+                    <h2 class="text-xl font-heading font-bold text-slate-900">2. กำหนดการอบรมเชิงปฏิบัติการ 1 วันเต็ม (Master Agenda)</h2>
+                </div>
+                <p class="text-xs text-slate-600">
+                    โครงสร้างเวลาเน้นอัตราส่วน <strong>บรรยายหลักการ 40% และลงมือฝึกปฏิบัติจริง 60%</strong> เพื่อให้เกิดทักษะติดตัวกลับไปทำงาน
+                </p>
+
+                <div class="overflow-x-auto rounded-xl border border-slate-200">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-800 font-heading border-b border-slate-200">
+                                <th class="p-3 font-semibold w-28">เวลา</th>
+                                <th class="p-3 font-semibold w-48">หัวข้อ / กิจกรรม</th>
+                                <th class="p-3 font-semibold">รายละเอียดกิจกรรม & สื่อที่ใช้</th>
+                                <th class="p-3 font-semibold w-32">บทบาทวิทยากร</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 text-slate-700">
+                            <tr class="bg-slate-50/50">
+                                <td class="p-3 font-mono font-medium text-slate-600">08.30 - 09.00</td>
+                                <td class="p-3 font-semibold">ลงทะเบียน & เช็คความพร้อม</td>
+                                <td class="p-3">แจกเอกสาร Handout, ตรวจสอบการเชื่อมต่อ Wi-Fi และการล็อกอินเข้าใช้งาน AI</td>
+                                <td class="p-3 text-slate-500">ทีม TA ประจำโต๊ะ</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-mono font-medium text-gov-800">09.00 - 09.20</td>
+                                <td class="p-3 font-semibold text-gov-800">พิธีเปิด & สู่ท้องถิ่นดิจิทัล</td>
+                                <td class="p-3">กล่าวเปิดงาน, ชี้แจง Roadmap 7 โมดูล และความจำเป็นที่ อปท. ต้องใช้ AI (Slide 1-2)</td>
+                                <td class="p-3 text-blue-700 font-medium">วิทยากรหลัก บรรยาย</td>
+                            </tr>
+                            <tr class="bg-blue-50/30">
+                                <td class="p-3 font-mono font-medium text-gov-800">09.20 - 10.30</td>
+                                <td class="p-3 font-semibold text-gov-800">Workshop 1: Prompt สารบรรณ</td>
+                                <td class="p-3">
+                                    • บรรยายสูตร 4 ส่วน (RTCF) และหนังสือราชการ 6 ชนิด (Slide 3-7)<br>
+                                    • <strong>ลงมือทำ:</strong> ให้ผู้เรียนพิมพ์ร่างหนังสือภายนอกขอวิทยากร และบันทึกข้อความขออนุมัติโครงการ ในระบบ ai.html
+                                </td>
+                                <td class="p-3 text-emerald-700 font-medium">สาธิต + โค้ชชิ่ง</td>
+                            </tr>
+                            <tr class="bg-amber-50/40 text-amber-900">
+                                <td class="p-3 font-mono font-medium">10.30 - 10.45</td>
+                                <td class="p-3 font-semibold">พักรับประทานอาหารว่าง</td>
+                                <td class="p-3">เปิดเพลงเบาๆ ฉายสไลด์ตารางหนังสือ 6 ชนิดค้างไว้</td>
+                                <td class="p-3 text-slate-500">พักเบรกเช้า</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-mono font-medium text-gov-800">10.45 - 11.45</td>
+                                <td class="p-3 font-semibold text-gov-800">Workshop 2: สรุปหนังสือเวียน สถ.</td>
+                                <td class="p-3">
+                                    • เทคนิคอัปโหลด PDF/Word เพื่อสกัดสาระสำคัญสู่ Executive Summary (Slide 8-10)<br>
+                                    • <strong>ลงมือทำ:</strong> ให้ผู้เรียนนำระเบียบจริงของ อปท. มาทำ Checklist Action Items เสนอนายก
+                                </td>
+                                <td class="p-3 text-emerald-700 font-medium">สาธิต + สุ่มผลงานตรวจ</td>
+                            </tr>
+                            <tr class="bg-blue-50/30">
+                                <td class="p-3 font-mono font-medium text-gov-800">11.45 - 12.30</td>
+                                <td class="p-3 font-semibold text-gov-800">Workshop 3: AI สื่อสารประชาชน</td>
+                                <td class="p-3">
+                                    • การแปลงภาษาราชการเป็นโพสต์ Facebook และข้อความตอบกลับข้อร้องเรียน (Slide 11-13)<br>
+                                    • <strong>ลงมือทำ:</strong> ร่างโพสต์ภาษีที่ดินฯ และตอบกลับกรณีไฟดับ/น้ำไม่ไหล
+                                </td>
+                                <td class="p-3 text-emerald-700 font-medium">แชร์ผลงานขึ้นจอใหญ่</td>
+                            </tr>
+                            <tr class="bg-slate-100 text-slate-700">
+                                <td class="p-3 font-mono font-medium">12.30 - 13.30</td>
+                                <td class="p-3 font-semibold">พักรับประทานอาหารกลางวัน</td>
+                                <td class="p-3">-</td>
+                                <td class="p-3 text-slate-500">พักกลางวัน</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-mono font-medium text-gov-800">13.30 - 14.30</td>
+                                <td class="p-3 font-semibold text-gov-800">Workshop 4: ยุทธศาสตร์ & งบประมาณ</td>
+                                <td class="p-3">
+                                    • การวิเคราะห์ SWOT การท่องเที่ยว และ Root Cause งบประมาณเบิกจ่ายล่าช้า (Slide 14-16)<br>
+                                    • <strong>ลงมือทำ:</strong> จัดทำข้อเสนอแนะเชิงบริหาร 3 ข้อเพื่อเร่งรัดงบลงทุน
+                                </td>
+                                <td class="p-3 text-emerald-700 font-medium">อภิปรายกลุ่มย่อย</td>
+                            </tr>
+                            <tr class="bg-blue-50/30">
+                                <td class="p-3 font-mono font-medium text-gov-800">14.30 - 15.15</td>
+                                <td class="p-3 font-semibold text-gov-800">Workshop 5: Workflow & Traffy Fondue</td>
+                                <td class="p-3">
+                                    • การออกแบบกระบวนงาน SOP (ใบอนุญาตก่อสร้าง อ.1) และประมวลผลข้อร้องเรียน (Slide 17-18)<br>
+                                    • <strong>ลงมือทำ:</strong> จัดกลุ่มข้อมูลร้องเรียน 100 เรื่อง และจัดลำดับความเร่งด่วน
+                                </td>
+                                <td class="p-3 text-emerald-700 font-medium">สาธิตการวิเคราะห์ข้อมูล</td>
+                            </tr>
+                            <tr class="bg-amber-50/40 text-amber-900">
+                                <td class="p-3 font-mono font-medium">15.15 - 15.30</td>
+                                <td class="p-3 font-semibold">พักรับประทานอาหารว่าง</td>
+                                <td class="p-3">เปิดคลิปตัวอย่างเทคโนโลยีท้องถิ่นอัจฉริยะ (Smart City)</td>
+                                <td class="p-3 text-slate-500">พักเบรกบ่าย</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-mono font-medium text-gov-800">15.30 - 16.00</td>
+                                <td class="p-3 font-semibold text-rose-800">บรรยายพิเศษ: จริยธรรม AI & PDPA</td>
+                                <td class="p-3">
+                                    • ชั้นความลับของข้อมูลราชการ (ลับที่สุด/ลับมาก/ลับ) ที่ห้ามนำเข้า AI (Slide 19-22)<br>
+                                    • กฎเหล็ก 3 Dos & 3 Don'ts และตัวอย่าง Good vs Bad Prompt
+                                </td>
+                                <td class="p-3 text-rose-700 font-medium">เน้นย้ำความรับผิดชอบ</td>
+                            </tr>
+                            <tr class="bg-emerald-50/40">
+                                <td class="p-3 font-mono font-medium text-gov-800">16.00 - 16.30</td>
+                                <td class="p-3 font-semibold text-emerald-800">สรุป Action Plan & Post-Test</td>
+                                <td class="p-3">
+                                    • ทำโจทย์ End-to-End Case Study จัดงานประเพณีท้องถิ่น (Slide 23)<br>
+                                    • กรอกใบงาน Action Plan 30 วัน ใน Handout และทำแบบทดสอบ Post-Test บน ai.html (Slide 24-25)
+                                </td>
+                                <td class="p-3 text-slate-800 font-medium">มอบรางวัล & ปิดการอบรม</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section 3: Module-by-Module Facilitator Notes & Scripts -->
+            <section id="scripts" class="space-y-8">
+                <div class="flex items-center gap-2 border-l-4 border-gov-800 pl-3">
+                    <h2 class="text-xl font-heading font-bold text-slate-900">3. แผนการสอน สคริปต์คำพูด และคำถามกระตุ้นคิด (7 โมดูล)</h2>
+                </div>
+
+                <!-- Module 1 -->
+                <div class="border border-slate-200 rounded-2xl p-5 space-y-4 bg-white shadow-2xs">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                        <div>
+                            <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-blue-100 text-blue-800">Module 1</span>
+                            <h3 class="text-base font-heading font-bold text-slate-900 mt-1">หลักการเขียน Prompt ให้ AI เข้าใจงานราชการ (สูตร RTCF & หนังสือ 6 ชนิด)</h3>
+                        </div>
+                        <span class="text-xs text-slate-500 font-mono">สไลด์ที่ 3 - 7</span>
+                    </div>
+
+                    <div class="script-box p-4 rounded-xl text-xs space-y-2">
+                        <div class="font-heading font-bold text-emerald-800 flex items-center gap-1.5">
+                            <i data-lucide="mic" class="w-4 h-4"></i> สคริปต์เปิดประเด็น (Opening Analogy):
+                        </div>
+                        <p class="text-slate-700 leading-relaxed italic">
+                            "สวัสดีครับทุกท่าน ขอต้อนรับสู่โลกของการทำงานยุคใหม่ หลายท่านอาจจะเคยลองคุยกับ ChatGPT หรือ AI มาบ้าง แล้วรู้สึกว่า 'ทำไมภาษาที่ตอบกลับมามันดูแปลกๆ ไม่เหมือนหนังสือราชการบ้านเราเลย?' คำตอบก็คือ AI เหมือนเด็กฝึกงานที่เพิ่งจบมาใหม่ๆ หัวไวมาก ทำงานเร็วมาก แต่เขา 'ไม่เคยรู้ระเบียบสำนักนายกรัฐมนตรีปี 2526' หน้าที่ของเราในฐานะข้าราชการผู้กำกับดูแล คือการป้อน 'คำสั่งและกรอบงาน' (Prompt) ที่ชัดเจน วันนี้เราจะมาเรียนสูตร 4 ตัวง่ายๆ ที่จำแล้วใช้ได้ตลอดไป คือ RTCF ครับ..."
+                        </p>
+                    </div>
+
+                    <div class="question-box p-4 rounded-xl text-xs space-y-2">
+                        <div class="font-heading font-bold text-blue-800 flex items-center gap-1.5">
+                            <i data-lucide="help-circle" class="w-4 h-4"></i> คำถามกระตุ้นความคิด (Thought-Provoking Questions):
+                        </div>
+                        <ul class="space-y-1 text-slate-700 list-disc pl-4">
+                            <li>"ถ้าเราสั่ง AI ว่า 'ช่วยเขียนหนังสือขอวิทยากรหน่อย' กับสั่งแบบใส่ Role และระเบียบสารบรรณ ผลลัพธ์จะต่างกันอย่างไร?"</li>
+                            <li>"มีใครเคยเจอปัญหานายกฯ หรือปลัด ตีกลับบันทึกข้อความเพราะเขียนเหตุผลไม่เข้าข้อเท็จจริงบ้างไหมครับ?"</li>
+                        </ul>
+                    </div>
+
+                    <div class="pitfall-box p-4 rounded-xl text-xs space-y-2">
+                        <div class="font-heading font-bold text-rose-800 flex items-center gap-1.5">
+                            <i data-lucide="alert-triangle" class="w-4 h-4"></i> ข้อผิดพลาดที่พบบ่อย (Common Pitfalls) & จุดที่ TA ต้องคอยดู:
+                        </div>
+                        <p class="text-slate-700 leading-relaxed">
+                            ผู้เรียนมักลืมใส่คำว่า "กระดาษบันทึกข้อความ" หรือ "ใช้ระเบียบสารบรรณ 2526" ทำให้ AI ใช้คำลงท้ายผิด เช่น หนังสือภายในแต่ดันลงท้ายว่า "ขอแสดงความนับถือ" ให้วิทยากรย้ำว่า <strong>หนังสือภายในไม่มีคำลงท้าย</strong> ให้ AI ตัดออกเสมอ
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Module 2 -->
+                <div class="border border-slate-200 rounded-2xl p-5 space-y-4 bg-white shadow-2xs">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                        <div>
+                            <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-indigo-100 text-indigo-800">Module 2</span>
+                            <h3 class="text-base font-heading font-bold text-slate-900 mt-1">AI ช่วยจัดทำเอกสารราชการ สรุปหนังสือเวียน สถ. & ตรวจร่างข้อบัญญัติ</h3>
+                        </div>
+                        <span class="text-xs text-slate-500 font-mono">สไลด์ที่ 8 - 10</span>
+                    </div>
+
+                    <div class="script-box p-4 rounded-xl text-xs space-y-2">
+                        <div class="font-heading font-bold text-emerald-800 flex items-center gap-1.5">
+                            <i data-lucide="mic" class="w-4 h-4"></i> สคริปต์การสาธิต (Demo Script):
+                        </div>
+                        <p class="text-slate-700 leading-relaxed italic">
+                            "งานที่ดูดพลังชีวิตของกองคลังและสำนักปลัดมากที่สุด คือหนังสือเวียนจากกรมส่งเสริมฯ (สถ.) ที่ส่งมาทีละ 30-40 หน้า มาดูกันครับว่าถ้าเราป้อนไฟล์นี้เข้า AI พร้อมคำสั่ง 'สรุปสาระสำคัญเป็น Executive Summary 1 หน้า โดยทำตารางเปรียบเทียบว่าระเบียบเดิมเป็นอย่างไร ระเบียบใหม่แก้อะไร และ อปท. ต้องทำอะไรต่อ' ภายใน 10 วินาที เราจะได้รายงานสรุปที่ปลัดเทศบาลอ่านแล้วเซ็นสั่งการได้ทันที..."
+                        </p>
+                    </div>
+
+                    <div class="tip-box p-4 rounded-xl text-xs space-y-2">
+                        <div class="font-heading font-bold text-amber-800 flex items-center gap-1.5">
+                            <i data-lucide="lightbulb" class="w-4 h-4"></i> เคล็ดลับการสอน (Facilitator Tip):
+                        </div>
+                        <p class="text-slate-700 leading-relaxed">
+                            เตรียมไฟล์ PDF ตัวอย่างหนังสือเวียนจริงของ สถ. 1 ฉบับ (ขนาดประมาณ 5-10 หน้า) แจกให้ผู้เรียนทดลองอัปโหลดเข้า AI พร้อมกัน เพื่อให้ทุกคนเห็นผลลัพธ์ด้วยตาตนเอง
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Module 3 -->
+                <div class="border border-slate-200 rounded-2xl p-5 space-y-4 bg-white shadow-2xs">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                        <div>
+                            <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-blue-100 text-blue-800">Module 3</span>
+                            <h3 class="text-base font-heading font-bold text-slate-900 mt-1">AI เพื่อการประชาสัมพันธ์และการสื่อสารกับประชาชน (Citizen-Centric Tone)</h3>
+                        </div>
+                        <span class="text-xs text-slate-500 font-mono">สไลด์ที่ 11 - 13</span>
+                    </div>
+
+                    <div class="script-box p-4 rounded-xl text-xs space-y-2">
+                        <div class="font-heading font-bold text-emerald-800 flex items-center gap-1.5">
+                            <i data-lucide="mic" class="w-4 h-4"></i> สคริปต์เน้นย้ำ (Key Talking Point):
+                        </div>
+                        <p class="text-slate-700 leading-relaxed italic">
+                            "ปัญหาคลาสสิกของเพจเฟซบุ๊กเทศบาลคือ 'การสแกนหนังสือราชการขาวดำไปโพสต์' ตัวหนังสือเล็ก ละเอียดยิบ ประชาชนเลื่อนผ่านทันที วันนี้เราจะใช้ AI เปลี่ยนภาษามาตรากฎหมาย ให้เป็น 'โพสต์ที่ชาวบ้านอ่านจบใน 1 นาที' โดยใส่ Emoji อย่างสุภาพ และมี Call to Action ชัดเจน เช่น ต้องไปจ่ายภาษีที่ไหน ไม่จ่ายจะโดนอะไร และเบอร์โทรติดต่อ..."
+                        </p>
+                    </div>
+
+                    <div class="question-box p-4 rounded-xl text-xs space-y-2">
+                        <div class="font-heading font-bold text-blue-800 flex items-center gap-1.5">
+                            <i data-lucide="help-circle" class="w-4 h-4"></i> คำถามกระตุ้นความคิด:
+                        </div>
+                        <p class="text-slate-700">
+                            "เวลาชาวบ้านมาร้องเรียนในเพจเรื่องไฟดับ ถ้าแอดมินตอบว่า 'รับเรื่องแล้ว จะส่งกองช่างตามระเบียบ' กับตอบแบบใส่กรอบเวลาแน่นอน ชาวบ้านจะรู้สึกต่างกันอย่างไร?"
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Module 4 & 5 -->
+                <div class="border border-slate-200 rounded-2xl p-5 space-y-4 bg-white shadow-2xs">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                        <div>
+                            <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-purple-100 text-purple-800">Module 4 & 5</span>
+                            <h3 class="text-base font-heading font-bold text-slate-900 mt-1">AI งานยุทธศาสตร์ แผนพัฒนาท้องถิ่น งบประมาณ & วิเคราะห์ Traffy Fondue</h3>
+                        </div>
+                        <span class="text-xs text-slate-500 font-mono">สไลด์ที่ 14 - 18</span>
+                    </div>
+
+                    <div class="script-box p-4 rounded-xl text-xs space-y-2">
+                        <div class="font-heading font-bold text-emerald-800 flex items-center gap-1.5">
+                            <i data-lucide="mic" class="w-4 h-4"></i> สคริปต์เชื่อมโยงสู่งานนโยบาย:
+                        </div>
+                        <p class="text-slate-700 leading-relaxed italic">
+                            "AI ไม่ได้มีไว้แค่ร่างหนังสือธรรมดา แต่เป็น 'ที่ปรึกษาเชิงยุทธศาสตร์' ของผู้บริหารท้องถิ่น นักวิเคราะห์นโยบายและแผนสามารถป้อนข้อมูลแผนพัฒนาท้องถิ่นและตัวเลขงบประมาณ 5 ปี ให้ AI ช่วยหาสาเหตุว่า 'ทำไมงบลงทุนของเราถึงเบิกจ่ายได้ต่ำแค่ 4% ในไตรมาส 2' และให้ AI ช่วยสังเคราะห์ 3 มาตรการเชิงบริหารเสนอนายกเทศมนตรีเพื่อปลดล็อกปัญหา..."
+                        </p>
+                    </div>
+
+                    <div class="pitfall-box p-4 rounded-xl text-xs space-y-2">
+                        <div class="font-heading font-bold text-rose-800 flex items-center gap-1.5">
+                            <i data-lucide="alert-triangle" class="w-4 h-4"></i> ข้อควรระวังเรื่องตัวเลขงบประมาณ:
+                        </div>
+                        <p class="text-slate-700 leading-relaxed">
+                            ย้ำเตือนผู้เรียนว่า Generative AI อาจคำนวณตัวเลขบวก ลบ คูณ หาร ผิดพลาดได้ (LLM Math Limitation) ดังนั้น <strong>ห้ามเชื่อตัวเลขรวมของ AI โดยไม่ตรวจสอบซ้ำด้วย Excel หรือเครื่องคิดเลข</strong> ให้ใช้ AI เพื่อหา "สาเหตุเชิงคุณภาพและข้อเสนอแนะ" เป็นหลัก
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Module 6: Ethics & PDPA -->
+                <div class="border border-slate-200 rounded-2xl p-5 space-y-4 bg-white shadow-2xs">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                        <div>
+                            <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-rose-100 text-rose-800">Module 6</span>
+                            <h3 class="text-base font-heading font-bold text-slate-900 mt-1">การบรรยายพิเศษ: จริยธรรม AI ความลับราชการ และกฎหมาย PDPA</h3>
+                        </div>
+                        <span class="text-xs text-slate-500 font-mono">สไลด์ที่ 19 - 22</span>
+                    </div>
+
+                    <div class="script-box p-4 rounded-xl text-xs space-y-2">
+                        <div class="font-heading font-bold text-emerald-800 flex items-center gap-1.5">
+                            <i data-lucide="mic" class="w-4 h-4"></i> สคริปต์เน้นย้ำความรับผิดชอบ (Tone of Seriousness):
+                        </div>
+                        <p class="text-slate-700 leading-relaxed italic">
+                            "หัวข้อนี้คือหัวข้อที่สำคัญที่สุดของวันครับ ถ้าเราใช้ AI เก่งมากแต่เผลอเอาข้อมูลส่วนบุคคลของชาวบ้าน เช่น เลขบัตร 13 หลัก ข้อมูลคนไข้ หรือเอกสารลับการสอบสวนวินัย อัปโหลดเข้า AI สาธารณะ โทษทางกฎหมายตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA) มีทั้งทางแพ่งและอาญา และกฎหมายระบุชัดเจนว่า 'AI ไม่ใช่นิติบุคคล' คนที่ต้องรับผิดชอบคือข้าราชการผู้พิมพ์คำสั่งและผู้ลงนามครับ..."
+                        </p>
+                    </div>
+
+                    <div class="tip-box p-4 rounded-xl text-xs space-y-2">
+                        <div class="font-heading font-bold text-amber-800 flex items-center gap-1.5">
+                            <i data-lucide="check-square" class="w-4 h-4"></i> สรุป 3 Dos & 3 Don'ts ให้ทุกคนท่องพร้อมกัน:
+                        </div>
+                        <p class="text-slate-700">
+                            ชี้ไปที่สไลด์ที่ 22 ให้อ่านและทบทวน: <strong>Do Verify, Do Anonymize, Do Keep Control</strong> / <strong>Don't Upload Secrets, Don't Blindly Trust, Don't Replace Discretion</strong>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Module 7: Action Plan -->
+                <div class="border border-slate-200 rounded-2xl p-5 space-y-4 bg-white shadow-2xs">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                        <div>
+                            <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-100 text-emerald-800">Module 7</span>
+                            <h3 class="text-base font-heading font-bold text-slate-900 mt-1">โจทย์จำลองงานจริงบูรณาการ (End-to-End) & แผนปฏิบัติการ 30 วันแรก</h3>
+                        </div>
+                        <span class="text-xs text-slate-500 font-mono">สไลด์ที่ 23 - 25</span>
+                    </div>
+
+                    <div class="script-box p-4 rounded-xl text-xs space-y-2">
+                        <div class="font-heading font-bold text-emerald-800 flex items-center gap-1.5">
+                            <i data-lucide="mic" class="w-4 h-4"></i> สคริปต์กระตุ้นการนำไปใช้จริง:
+                        </div>
+                        <p class="text-slate-700 leading-relaxed italic">
+                            "การอบรมที่ดีไม่ใช่การจบลงที่ห้องนี้แล้วกลับไปทำงานแบบเดิม วันนี้ในเอกสาร Handout หน้าสุดท้าย มีตาราง Action Plan 30 วัน ขอให้ทุกท่านเขียนงานประจำของท่าน 1 อย่างที่คิดว่าจะเริ่มใช้ AI ตั้งแต่วันจันทร์หน้า และสัปดาห์ละ 1 กิจกรรม เพื่อให้เห็นผลประหยัดเวลาจริงอย่างน้อย 50%..."
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: Coaching & Troubleshooting Guide -->
+            <section id="coaching" class="space-y-4">
+                <div class="flex items-center gap-2 border-l-4 border-gov-800 pl-3">
+                    <h2 class="text-xl font-heading font-bold text-slate-900">4. คู่มือการโค้ชชิ่งและแก้ไขปัญหาเฉพาะหน้า (Troubleshooting Guide)</h2>
+                </div>
+
+                <div class="space-y-3 text-xs">
+                    <div class="p-4 rounded-xl border border-slate-200 bg-white space-y-2">
+                        <div class="font-heading font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <span class="w-6 h-6 rounded bg-purple-100 text-purple-700 flex items-center justify-center font-bold">1</span>
+                            การดูแลผู้เข้าอบรมที่ไม่คุ้นเคยกับเทคโนโลยี (Senior Officers)
+                        </div>
+                        <p class="text-slate-600 leading-relaxed">
+                            • <strong>อย่าเร่งรีบ:</strong> ให้ TA ประจำโต๊ะนั่งประกบ และแนะนำให้ใช้ฟังก์ชัน <strong>"คัดลอกคำสั่ง" (Copy Prompt)</strong> จากหน้าเว็บ ai.html มาวาง แทนการพิมพ์เองตั้งแต่ต้น<br>
+                            • <strong>สร้างความมั่นใจ:</strong> ชมเชยเมื่อผู้เรียนสร้างผลลัพธ์แรกได้สำเร็จ อธิบายว่า AI ใช้งานง่ายเหมือนการส่งข้อความคุยกับเพื่อนใน LINE
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl border border-slate-200 bg-white space-y-2">
+                        <div class="font-heading font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <span class="w-6 h-6 rounded bg-rose-100 text-rose-700 flex items-center justify-center font-bold">2</span>
+                            การรับมือเมื่อ AI แสดงข้อมูลผิดพลาด (Hallucination) หน้าห้อง
+                        </div>
+                        <p class="text-slate-600 leading-relaxed">
+                            • <strong>อย่าตระหนก:</strong> ใช้เหตุการณ์นี้เป็นกรณีสอนจริง (Teachable Moment) ให้ผู้เรียนเห็นว่านี่คือสาเหตุที่ต้องมีมนุษย์คอยตรวจ (Human-in-the-loop)<br>
+                            • <strong>สาธิต Follow-up Prompt:</strong> แสดงการพิมพ์สั่งแก้ เช่น <em>"ข้อมูลเลขที่ระเบียบผิด ระเบียบสารบรรณคือ พ.ศ. 2526 ไม่ใช่ 2553 กรุณาแก้ไขให้ถูกต้อง"</em> เพื่อให้ผู้เรียนเห็นวิธีรับมือ
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl border border-slate-200 bg-white space-y-2">
+                        <div class="font-heading font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <span class="w-6 h-6 rounded bg-amber-100 text-amber-700 flex items-center justify-center font-bold">3</span>
+                            กรณีสัญญาณอินเทอร์เน็ตสะดุด หรือผู้เรียนใช้งาน AI เกินโควตาฟรี
+                        </div>
+                        <p class="text-slate-600 leading-relaxed">
+                            • <strong>สลับเครื่องมือสำรอง:</strong> หาก ChatGPT ฟรีติด Limit ให้แนะนำให้ผู้เรียนสลับไปใช้ Google Gemini หรือ Claude ทันที<br>
+                            • <strong>ใช้ Interactive Prompt Builder:</strong> ในระบบ <code>ai.html</code> สามารถประกอบ Prompt และดูตัวอย่างผลลัพธ์จำลองแบบ Offline ได้โดยไม่ต้องต่อ AI ภายนอก
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: Solutions & Evaluation Rubrics -->
+            <section id="solutions" class="space-y-4">
+                <div class="flex items-center gap-2 border-l-4 border-gov-800 pl-3">
+                    <h2 class="text-xl font-heading font-bold text-slate-900">5. เฉลยแบบฝึกหัดและเกณฑ์ประเมินผลงาน (Rubrics & Solutions)</h2>
+                </div>
+
+                <!-- Rubric Table -->
+                <div class="overflow-x-auto rounded-xl border border-slate-200">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-800 font-heading border-b border-slate-200">
+                                <th class="p-3 font-semibold w-36">เกณฑ์การประเมิน</th>
+                                <th class="p-3 font-semibold">ระดับดีมาก (3 คะแนน)</th>
+                                <th class="p-3 font-semibold">ระดับพอใช้ (2 คะแนน)</th>
+                                <th class="p-3 font-semibold">ระดับต้องปรับปรุง (1 คะแนน)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 text-slate-700">
+                            <tr>
+                                <td class="p-3 font-semibold text-gov-800">1. ความครบถ้วนของโครงสร้าง RTCF (30%)</td>
+                                <td class="p-3">ระบุ Role, Task, Context และ Format ครบถ้วน บริบทละเอียดชัดเจน</td>
+                                <td class="p-3">ระบุ 2-3 องค์ประกอบ ขาดบริบทบางส่วนแต่ AI พอเข้าใจได้</td>
+                                <td class="p-3">สั่งสั้นๆ เช่น "ช่วยเขียนหนังสือ..." ขาดบทบาทและรูปแบบผลลัพธ์</td>
+                            </tr>
+                            <tr class="bg-slate-50/50">
+                                <td class="p-3 font-semibold text-gov-800">2. ความถูกต้องตามสารบรรณ (40%)</td>
+                                <td class="p-3">ใช้ระดับภาษาราชการถูกต้อง แบ่ง 3 ย่อหน้า (ต้นเรื่อง/เหตุ/ประสงค์) คำลงท้ายถูก</td>
+                                <td class="p-3">ภาษาราชการปานกลาง มีคำฟุ่มเฟือยเล็กน้อย โครงสร้างไม่ครบ 3 ส่วน</td>
+                                <td class="p-3">ใช้ภาษาพูด ใช้คำลงท้ายผิดระเบียบ หรือโครงสร้างไม่เป็นสารบรรณ</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-gov-800">3. ความปลอดภัยข้อมูล & PDPA (30%)</td>
+                                <td class="p-3">ไม่มีเลขบัตร 13 หลัก ไม่มีชื่อจริงประชาชน และไม่มีข้อมูลลับราชการ 100%</td>
+                                <td class="p-3">มีการปกปิดข้อมูลส่วนใหญ่ แต่ยังมีเบอร์โทรหรือชื่อสถานที่เฉพาะเจาะจง</td>
+                                <td class="p-3 text-rose-700 font-semibold">ใส่เลขบัตร ปชช. จริง หรือข้อมูลชั้นความลับลงในคำสั่ง</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Post-Test Answer Key -->
+                <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 text-xs">
+                    <h4 class="font-heading font-bold text-gov-900 text-sm flex items-center gap-2">
+                        <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i> เฉลยแบบทดสอบ Post-Test 5 ข้อ (ในระบบ ai.html)
+                    </h4>
+                    <div class="space-y-2 text-slate-700">
+                        <p><strong>ข้อ 1:</strong> โครงสร้าง Prompt 4 ส่วนตอบ <em>ข. บทบาท (Role) + งานที่ต้องการ (Task) + บริบท (Context) + รูปแบบภาษา (Format)</em></p>
+                        <p><strong>ข้อ 2:</strong> หนังสือราชการที่ส่งถึงอธิการบดีภายนอกตอบ <em>ก. หนังสือภายนอก (ใช้กระดาษตราครุฑ)</em></p>
+                        <p><strong>ข้อ 3:</strong> ข้อมูลที่ห้ามใส่ใน AI สาธารณะตอบ <em>ค. เลขประจำตัวประชาชน 13 หลักของผู้รับเบี้ยยังชีพ</em></p>
+                        <p><strong>ข้อ 4:</strong> เมื่อผลลัพธ์แรกยังไม่พอใจตอบ <em>ข. สั่งแก้ไขเฉพาะจุด เช่น 'ปรับย่อหน้าที่ 2 ให้กระชับขึ้น'</em></p>
+                        <p><strong>ข้อ 5:</strong> ความรับผิดชอบทางกฎหมายของเอกสารตอบ <em>ค. เจ้าหน้าที่ผู้จัดทำและหัวหน้าส่วนราชการผู้ลงนาม</em></p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="no-print border-t border-slate-200 bg-white py-4 px-6 text-center text-xs text-slate-500">
+        คู่มือวิทยากรและผู้ช่วยสอน: โครงการฝึกอบรมเชิงปฏิบัติการ การประยุกต์ใช้ AI เพื่อยกระดับการทำงานขององค์กรปกครองส่วนท้องถิ่น (อปท.)
+    </footer>
+
+    <script>
+        if (window.lucide) {
+            window.lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

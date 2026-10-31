@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI สำหรับงานราชการและ อปท. - ระบบการเรียนการสอนออนไลน์</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Sarabun & Prompt -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Sarabun', 'sans-serif'],
+                        heading: ['Prompt', 'sans-serif'],
+                    },
+                    colors: {
+                        gov: {
+                            50: '#f0f5ff',
+                            100: '#e0eafc',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            800: '#1e3a8a',
+                            900: '#0f172a',
+                            gold: '#d97706',
+                            goldLight: '#fef3c7'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+        }
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Prompt', sans-serif;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .presentation-zoom {
+            font-size: 1.125rem;
+        }
+        .presentation-zoom h2 {
+            font-size: 2rem;
+        }
+        .presentation-zoom .prompt-box {
+            font-size: 1.15rem;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-blue-600 selection:text-white">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-3 bg-slate-900 text-white px-5 py-3.5 rounded-xl shadow-2xl border border-slate-700">
+        <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+        <span id="toast-message" class="font-medium text-sm">คัดลอกคำสั่ง Prompt เรียบร้อยแล้ว!</span>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-40 bg-gov-900 text-white shadow-lg border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+            <!-- Brand / Title -->
+            <div class="flex items-center gap-3">
+                <button id="mobile-menu-btn" onclick="toggleMobileSidebar()" class="lg:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 focus:outline-none">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-md shrink-0">
+                    <i data-lucide="landmark" class="w-6 h-6 text-slate-950"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-heading font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">หลักสูตรปฏิบัติการ อปท.</span>
+                        <span class="hidden sm:inline-block text-xs text-slate-400">พ.ศ. 2569</span>
+                    </div>
+                    <h1 class="font-heading font-bold text-base sm:text-lg text-white truncate max-w-[240px] sm:max-w-md md:max-w-xl">
+                        การประยุกต์ใช้ AI เพื่อยกระดับการทำงานของ อปท.
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Right Actions: Search, Tools & Presentation Mode -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Progress Indicator -->
+                <div class="hidden md:flex items-center gap-2 bg-slate-800/90 px-3 py-1.5 rounded-lg border border-slate-700">
+                    <div class="text-xs text-slate-300 font-heading">ความคืบหน้า:</div>
+                    <div class="w-24 h-2 bg-slate-700 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="h-full bg-emerald-500 transition-all duration-500" style="width: 14%"></div>
+                    </div>
+                    <span id="progress-text" class="text-xs font-bold text-emerald-400">1/7</span>
+                </div>
+
+                <!-- Link to Trainer Guide -->
+                <a href="trainer_guide.html" target="_blank" class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-heading font-medium bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 transition" title="เปิดคู่มือวิทยากรและผู้ช่วยสอน">
+                    <i data-lucide="book-open-check" class="w-4 h-4 text-amber-400"></i>
+                    <span class="hidden sm:inline">คู่มือวิทยากร</span>
+                </a>
+
+                <!-- Link to Presentation Slides -->
+                <a href="slides.html" target="_blank" class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-heading font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="เปิดชุดสไลด์บรรยาย 16:9 สำหรับวิทยากร">
+                    <i data-lucide="presentation" class="w-4 h-4 text-amber-400"></i>
+                    <span class="hidden sm:inline">สไลด์บรรยาย (Slides)</span>
+                </a>
+
+                <!-- Link to Handout -->
+                <a href="handout.html" target="_blank" class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-heading font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="เปิดเอกสารสรุปและใบงานฝึกปฏิบัติ พิมพ์ A4">
+                    <i data-lucide="file-text" class="w-4 h-4 text-emerald-400"></i>
+                    <span class="hidden sm:inline">เอกสารสรุป (Handout)</span>
+                </a>
+
+                <!-- Interactive Prompt Builder Button -->
+                <button onclick="switchMainView('builder')" id="btn-view-builder" class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-heading font-medium bg-amber-500 hover:bg-amber-400 text-slate-950 transition shadow-sm">
+                    <i data-lucide="wand-2" class="w-4 h-4"></i>
+                    <span class="hidden sm:inline">เครื่องมือสร้าง Prompt</span>
+                </button>
+
+                <!-- Quiz / Post-Test Button -->
+                <button onclick="switchMainView('quiz')" id="btn-view-quiz" class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-heading font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+                    <i data-lucide="award" class="w-4 h-4 text-amber-400"></i>
+                    <span class="hidden sm:inline">แบบทดสอบ (Post-Test)</span>
+                </button>
+
+                <!-- Presentation Mode Toggle (For Instructor) -->
+                <button onclick="togglePresentationMode()" id="presentation-btn" title="โหมดบรรยายสำหรับวิทยากร (ขยายตัวอักษรและซ่อนเมนู)" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition">
+                    <i data-lucide="projector" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout Container -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="flex flex-col lg:flex-row gap-6 items-start">
+
+            <!-- Sidebar Navigation (Curriculum Modules) -->
+            <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-80 bg-white shadow-2xl lg:shadow-sm lg:static lg:w-80 lg:block transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out rounded-none lg:rounded-2xl border-r lg:border border-slate-200 overflow-y-auto max-h-screen lg:max-h-[calc(100vh-6rem)] shrink-0">
+                <!-- Mobile Header inside Sidebar -->
+                <div class="lg:hidden p-4 bg-gov-900 text-white flex items-center justify-between">
+                    <span class="font-heading font-bold">สารบัญหลักสูตรอบรม</span>
+                    <button onclick="toggleMobileSidebar()" class="p-1 rounded-lg text-slate-300 hover:text-white">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <!-- Search Prompts Box -->
+                <div class="p-4 border-b border-slate-100 bg-slate-50/50">
+                    <div class="relative">
+                        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                        <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="ค้นหาหัวข้อ หรือ Prompt..." class="w-full pl-9 pr-3 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                </div>
+
+                <!-- Module List -->
+                <div class="p-3 space-y-1.5" id="module-nav-list">
+                    <!-- Rendered dynamically via JS -->
+                </div>
+
+                <!-- Quick Links & External Resources -->
+                <div class="p-4 m-3 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 text-white space-y-3">
+                    <div class="flex items-center gap-2 text-amber-400 font-heading font-semibold text-sm">
+                        <i data-lucide="folder-kanban" class="w-4 h-4"></i>
+                        <span>เอกสารและไฟล์ประกอบ</span>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        ลิงก์ข้อมูลตัวอย่างงบประมาณ 5 ปีย้อนหลัง และสไลด์ประกอบการบรรยายสำหรับผู้เข้าอบรม
+                    </p>
+                    <div class="space-y-1.5 pt-1">
+                        <a href="https://docs.google.com/spreadsheets/d/1pfRppNdzTYrVeci1uMBj5CvAWOxMKpehb-nfz5njiuo/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between text-xs bg-white/10 hover:bg-white/20 px-3 py-2 rounded-lg transition">
+                            <span class="flex items-center gap-2 truncate"><i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> ข้อมูลงบประมาณ 5 ปี (Sheets)</span>
+                            <i data-lucide="external-link" class="w-3 h-3 shrink-0 opacity-75"></i>
+                        </a>
+                        <a href="https://share.gemini.google/L8Qehce6khIy" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between text-xs bg-white/10 hover:bg-white/20 px-3 py-2 rounded-lg transition">
+                            <span class="flex items-center justify-between gap-2 truncate"><i data-lucide="presentation" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> สไลด์บรรยายจริยธรรม AI</span>
+                            <i data-lucide="external-link" class="w-3 h-3 shrink-0 opacity-75"></i>
+                        </a>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Mobile Overlay -->
+            <div id="sidebar-overlay" onclick="toggleMobileSidebar()" class="fixed inset-0 bg-slate-900/50 z-40 hidden lg:hidden backdrop-blur-xs"></div>
+
+            <!-- Main Content Area -->
+            <main id="main-content" class="flex-1 w-full min-w-0 space-y-6">
+                
+                <!-- VIEW 1: WORKSHOP MODULE CONTENT -->
+                <div id="view-workshop" class="space-y-6">
+                    <!-- Dynamic Module Header Banner -->
+                    <div id="workshop-banner" class="bg-gradient-to-r from-gov-800 via-gov-700 to-blue-700 rounded-2xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
+                        <div class="relative z-10 space-y-3">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <span id="module-badge" class="px-3 py-1 rounded-full text-xs font-heading font-semibold bg-amber-400 text-slate-950 shadow-xs">
+                                    Workshop 1
+                                </span>
+                                <button onclick="markModuleComplete()" id="btn-complete-module" class="flex items-center gap-1.5 text-xs font-heading px-3 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white backdrop-blur-xs transition">
+                                    <i data-lucide="check-square" class="w-4 h-4"></i>
+                                    <span>ทำเครื่องหมายว่าเรียนจบหัวข้อนี้แล้ว</span>
+                                </button>
+                            </div>
+                            <h2 id="module-title" class="text-2xl sm:text-3xl font-heading font-bold leading-tight">
+                                หลักการเขียน Prompt ให้ AI เข้าใจงานราชการ
+                            </h2>
+                            <p id="module-description" class="text-blue-100 text-sm sm:text-base max-w-3xl leading-relaxed">
+                                เรียนรู้พื้นฐานสำคัญของการสื่อสารกับ AI (Prompt Engineering) โดยเน้นบริบทเฉพาะขององค์กรปกครองส่วนท้องถิ่น
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Sub-navigation Tabs inside Workshop -->
+                    <div class="flex overflow-x-auto gap-2 border-b border-slate-200 pb-px" id="workshop-tabs">
+                        <button onclick="switchWorkshopTab('overview')" id="tab-overview" class="workshop-tab-btn flex items-center gap-2 px-4 py-2.5 font-heading font-medium text-sm rounded-t-xl border-b-2 border-blue-600 text-blue-700 bg-blue-50/60 whitespace-nowrap">
+                            <i data-lucide="book-open" class="w-4 h-4"></i>
+                            <span>เนื้อหาและโครงสร้าง Prompt</span>
+                        </button>
+                        <button onclick="switchWorkshopTab('prompts')" id="tab-prompts" class="workshop-tab-btn flex items-center gap-2 px-4 py-2.5 font-heading font-medium text-sm rounded-t-xl border-b-2 border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap">
+                            <i data-lucide="terminal" class="w-4 h-4"></i>
+                            <span>คลังตัวอย่าง Prompt</span>
+                            <span id="prompt-count-badge" class="px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-800 font-bold">7</span>
+                        </button>
+                        <button onclick="switchWorkshopTab('outputs')" id="tab-outputs" class="workshop-tab-btn flex items-center gap-2 px-4 py-2.5 font-heading font-medium text-sm rounded-t-xl border-b-2 border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i>
+                            <span>ผลลัพธ์ที่ได้จาก AI (Output)</span>
+                        </button>
+                    </div>
+
+                    <!-- Tab Content 1: Overview & Standard Structure -->
+                    <div id="content-overview" class="space-y-6">
+                        <!-- Key Learning Points -->
+                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-4">
+                            <div class="flex items-center gap-2.5 text-gov-800 font-heading font-bold text-lg">
+                                <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center">
+                                    <i data-lucide="list-checks" class="w-5 h-5"></i>
+                                </div>
+                                <h3>1. เนื้อหาการเรียนรู้ประจำหัวข้อ</h3>
+                            </div>
+                            <ul id="module-topics-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                                <!-- Injected via JS -->
+                            </ul>
+                        </div>
+
+                        <!-- Special Reference Section (Only shown in Workshop 1: 6 Types of Gov Docs) -->
+                        <div id="special-gov-docs-section" class="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-4 hidden">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                                <div class="flex items-center gap-2.5 text-gov-800 font-heading font-bold text-lg">
+                                    <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center">
+                                        <i data-lucide="scroll-text" class="w-5 h-5"></i>
+                                    </div>
+                                    <h3>ประเภทของหนังสือราชการ 6 ชนิด (ตามระเบียบงานสารบรรณ พ.ศ. 2526)</h3>
+                                </div>
+                                <span class="text-xs text-slate-500 bg-slate-100 px-3 py-1 rounded-full font-medium">คลิกที่การ์ดเพื่อดู Prompt ของแต่ละประเภท</span>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="gov-doc-types-grid">
+                                <!-- Rendered via JS -->
+                            </div>
+                        </div>
+
+                        <!-- 1x1 Table: Prompt Structure -->
+                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-4">
+                            <div class="flex items-center justify-between gap-2">
+                                <div class="flex items-center gap-2.5 text-gov-800 font-heading font-bold text-lg">
+                                    <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center">
+                                        <i data-lucide="cpu" class="w-5 h-5"></i>
+                                    </div>
+                                    <h3>โครงสร้าง Prompt มาตรฐาน (ตาราง 1x1)</h3>
+                                </div>
+                                <button onclick="copyCurrentStructure()" class="flex items-center gap-1.5 text-xs font-heading font-medium px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-700 transition">
+                                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                    <span>คัดลอกโครงสร้าง</span>
+                                </button>
+                            </div>
+
+                            <!-- 1x1 Table Format -->
+                            <div class="border-2 border-indigo-200 rounded-xl overflow-hidden bg-indigo-50/40">
+                                <div class="bg-indigo-900 text-white px-4 py-2.5 font-heading font-semibold text-sm flex items-center justify-between">
+                                    <span id="structure-table-header">โครงสร้าง Prompt มาตรฐานสำหรับงานราชการ</span>
+                                    <span class="text-xs bg-indigo-700 px-2 py-0.5 rounded text-indigo-200">สูตร 4 องค์ประกอบ</span>
+                                </div>
+                                <div id="structure-table-body" class="p-5 space-y-3 text-slate-800 leading-relaxed prompt-box">
+                                    <!-- Injected via JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Navigation to Prompts Tab -->
+                        <div class="flex justify-end">
+                            <button onclick="switchWorkshopTab('prompts')" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-heading font-medium px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition">
+                                <span>ดูตัวอย่าง Prompt ทั้งหมดในหัวข้อนี้</span>
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content 2: Prompt Examples (1x1 Table Style) -->
+                    <div id="content-prompts" class="space-y-6 hidden">
+                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-4">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                                <div>
+                                    <h3 class="font-heading font-bold text-lg text-slate-900 flex items-center gap-2">
+                                        <i data-lucide="terminal" class="w-5 h-5 text-blue-600"></i>
+                                        <span>ตารางตัวอย่าง Prompt พร้อมใช้งาน (1x1 Table)</span>
+                                    </h3>
+                                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+                                        ผู้เรียนสามารถกดปุ่ม "คัดลอก Prompt" เพื่อนำไปวางใน Gemini, ChatGPT หรือ Claude ได้ทันที หรือกด "ทดลองปรับแต่ง" เพื่อเปลี่ยนข้อมูลให้ตรงกับหน่วยงานของตนเอง
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- 1x1 Prompt Table Container -->
+                            <div id="prompts-list-container" class="space-y-5">
+                                <!-- Injected via JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content 3: AI Outputs (1x1 Table Style) -->
+                    <div id="content-outputs" class="space-y-6 hidden">
+                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-4">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                                <div>
+                                    <h3 class="font-heading font-bold text-lg text-slate-900 flex items-center gap-2">
+                                        <i data-lucide="file-check-2" class="w-5 h-5 text-emerald-600"></i>
+                                        <span>ตารางผลลัพธ์ที่ได้จาก AI (1x1 Table Output)</span>
+                                    </h3>
+                                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+                                        ตัวอย่างผลลัพธ์มาตรฐานเมื่อใช้โครงสร้าง Prompt ที่กำหนด (เจ้าหน้าที่ควรตรวจสอบความถูกต้องตามหลัก Human-in-the-Loop ก่อนนำไปใช้งานจริง)
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- 1x1 Outputs Container -->
+                            <div id="outputs-list-container" class="space-y-6">
+                                <!-- Injected via JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Module Pagination -->
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-200">
+                        <button onclick="navigateModule(-1)" id="btn-prev-module" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 font-heading text-sm font-medium transition shadow-2xs disabled:opacity-40 disabled:pointer-events-none">
+                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                            <span>หัวข้อก่อนหน้า</span>
+                        </button>
+                        <button onclick="navigateModule(1)" id="btn-next-module" class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gov-800 text-white hover:bg-gov-700 font-heading text-sm font-medium transition shadow-sm disabled:opacity-40 disabled:pointer-events-none">
+                            <span>หัวข้อถัดไป</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- VIEW 2: INTERACTIVE 4-ELEMENT PROMPT BUILDER (SANDBOX FOR STUDENTS) -->
+                <div id="view-builder" class="space-y-6 hidden">
+                    <div class="bg-gradient-to-r from-amber-500 via-amber-600 to-orange-600 rounded-2xl p-6 sm:p-8 text-white shadow-lg">
+                        <div class="flex items-center justify-between">
+                            <span class="px-3 py-1 rounded-full text-xs font-heading font-bold bg-slate-950 text-amber-400">
+                                Interactive Workshop Tool
+                            </span>
+                            <button onclick="switchMainView('workshop')" class="text-xs font-heading bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg flex items-center gap-1 transition">
+                                <i data-lucide="arrow-left" class="w-4 h-4"></i> กลับสู่บทเรียน
+                            </button>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-bold mt-3">
+                            เครื่องมือฝึกสร้าง Prompt 4 องค์ประกอบ สำหรับงานราชการ อปท.
+                        </h2>
+                        <p class="text-amber-50 text-sm sm:text-base mt-1 max-w-3xl">
+                            ทดลองกรอกข้อมูลตามภารกิจจริงของท่าน ระบบจะประกอบร่างเป็นคำสั่ง Prompt มาตรฐานตามระเบียบงานสารบรรณ พร้อมตรวจสอบความเสี่ยงด้านข้อมูลส่วนบุคคล (PDPA Check) ให้โดยอัตโนมัติ
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <!-- Form Inputs -->
+                        <div class="lg:col-span-7 bg-white rounded-2xl p-6 border border-slate-200 shadow-xs space-y-5">
+                            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                                <h3 class="font-heading font-bold text-slate-900 flex items-center gap-2">
+                                    <i data-lucide="sliders" class="w-5 h-5 text-amber-600"></i>
+                                    <span>กำหนดองค์ประกอบ Prompt ทั้ง 4 ส่วน</span>
+                                </h3>
+                                <button onclick="fillBuilderSample()" class="text-xs font-heading text-blue-600 hover:underline flex items-center gap-1">
+                                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> โหลดข้อมูลตัวอย่าง
+                                </button>
+                            </div>
+
+                            <!-- 1. Role -->
+                            <div class="space-y-1.5">
+                                <label class="block text-sm font-heading font-semibold text-slate-800">
+                                    1. บทบาท (Role) <span class="text-xs font-normal text-slate-500">- คุณต้องการให้ AI สวมบทบาทเป็นตำแหน่งใด?</span>
+                                </label>
+                                <div class="flex gap-2 flex-wrap pb-1">
+                                    <button type="button" onclick="setBuilderField('builder-role', 'นักจัดการงานทั่วไปชำนาญการ สังกัดสำนักปลัด')" class="text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-700 px-2.5 py-1 rounded-md border border-slate-200 transition">นักจัดการงานทั่วไปฯ</button>
+                                    <button type="button" onclick="setBuilderField('builder-role', 'นักวิเคราะห์นโยบายและแผนชำนาญการ กองยุทธศาสตร์และงบประมาณ')" class="text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-700 px-2.5 py-1 rounded-md border border-slate-200 transition">นักวิเคราะห์นโยบายและแผนฯ</button>
+                                    <button type="button" onclick="setBuilderField('builder-role', 'นักประชาสัมพันธ์ชำนาญการ ผู้ดูแลเพจและสื่อสารมวลชนของ อปท.')" class="text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-700 px-2.5 py-1 rounded-md border border-slate-200 transition">นักประชาสัมพันธ์ฯ</button>
+                                    <button type="button" onclick="setBuilderField('builder-role', 'นักวิชาการคลังชำนาญการ กองคลัง')" class="text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-700 px-2.5 py-1 rounded-md border border-slate-200 transition">นักวิชาการคลังฯ</button>
+                                </div>
+                                <input type="text" id="builder-role" oninput="updateLivePrompt()" placeholder="เช่น นักจัดการงานทั่วไปชำนาญการ สังกัดสำนักปลัด เทศบาลตำบลเมืองใหม่" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            </div>
+
+                            <!-- 2. Objective / Task -->
+                            <div class="space-y-1.5">
+                                <label class="block text-sm font-heading font-semibold text-slate-800">
+                                    2. งานที่ต้องการให้ทำ (Objective / Task) <span class="text-xs font-normal text-slate-500">- ระบุประเภทเอกสารหรือชิ้นงาน</span>
+                                </label>
+                                <div class="flex gap-2 flex-wrap pb-1">
+                                    <button type="button" onclick="setBuilderField('builder-task', 'ร่างหนังสือภายใน (บันทึกข้อความ) เสนอต่อนายกเทศมนตรีเพื่อขออนุมัติจัดโครงการ')" class="text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-700 px-2.5 py-1 rounded-md border border-slate-200 transition">ร่างบันทึกข้อความ</button>
+                                    <button type="button" onclick="setBuilderField('builder-task', 'ร่างหนังสือราชการภายนอก (กระดาษตราครุฑ) เพื่อขอความอนุเคราะห์วิทยากร')" class="text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-700 px-2.5 py-1 rounded-md border border-slate-200 transition">ร่างหนังสือภายนอก</button>
+                                    <button type="button" onclick="setBuilderField('builder-task', 'เขียนข่าวประชาสัมพันธ์สำหรับโพสต์ Facebook และ LINE OA ของหน่วยงาน')" class="text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-700 px-2.5 py-1 rounded-md border border-slate-200 transition">เขียนโพสต์ประชาสัมพันธ์</button>
+                                    <button type="button" onclick="setBuilderField('builder-task', 'วิเคราะห์ SWOT Analysis และเสนอโครงการใหม่เพื่อบรรจุในแผนพัฒนาท้องถิ่น')" class="text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-700 px-2.5 py-1 rounded-md border border-slate-200 transition">วิเคราะห์ SWOT & ร่างโครงการ</button>
+                                </div>
+                                <input type="text" id="builder-task" oninput="updateLivePrompt()" placeholder="เช่น ร่างบันทึกข้อความขออนุมัติจัดโครงการ / สรุปหนังสือเวียน สถ." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            </div>
+
+                            <!-- 3. Context & Details -->
+                            <div class="space-y-1.5">
+                                <label class="block text-sm font-heading font-semibold text-slate-800">
+                                    3. บริบทและข้อมูลสำคัญ (Context) <span class="text-xs font-normal text-slate-500">- เรื่อง, วันเวลา, สถานที่, งบประมาณ, กลุ่มเป้าหมาย</span>
+                                </label>
+                                <textarea id="builder-context" rows="4" oninput="updateLivePrompt()" placeholder="ระบุรายละเอียด เช่น โครงการฝึกอบรม AI วันศุกร์ที่ 15 พ.ย. 2569 ณ ห้องประชุมเทศบาล กลุ่มเป้าหมาย 50 คน งบประมาณ 15,000 บาท (ระวัง: อย่าใส่เลขบัตรประชาชน 13 หลัก หรือชื่อ-เบอร์โทรจริงของประชาชน)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                                <!-- Real-time PDPA Guard Alert -->
+                                <div id="pdpa-warning" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2">
+                                    <i data-lucide="shield-alert" class="w-4 h-4 text-rose-600 shrink-0 mt-0.5"></i>
+                                    <div>
+                                        <span class="font-bold">แจ้งเตือนความปลอดภัยข้อมูลส่วนบุคคล (PDPA Warning):</span>
+                                        ตรวจพบตัวเลขที่คล้ายเลขบัตรประจำตัวประชาชน 13 หลัก หรือหมายเลขโทรศัพท์ในข้อความของท่าน โปรดแทนที่ด้วย <code class="bg-rose-100 px-1 rounded">[ปกปิดข้อมูล]</code> ก่อนนำไปป้อนใน AI สาธารณะ
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 4. Format & Tone -->
+                            <div class="space-y-1.5">
+                                <label class="block text-sm font-heading font-semibold text-slate-800">
+                                    4. รูปแบบภาษาและผลลัพธ์ (Format & Tone)
+                                </label>
+                                <div class="flex gap-2 flex-wrap pb-1">
+                                    <button type="button" onclick="setBuilderField('builder-format', 'ใช้ภาษาราชการที่ถูกต้องตามระเบียบสำนักนายกรัฐมนตรีว่าด้วยงานสารบรรณ พ.ศ. 2526 แบ่งเนื้อหาเป็น 1. เรื่องเดิม 2. ข้อเท็จจริง 3. ข้อพิจารณาและข้อเสนอ')" class="text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-700 px-2.5 py-1 rounded-md border border-slate-200 transition">รูปแบบบันทึกข้อความ 3 ส่วน</button>
+                                    <button type="button" onclick="setBuilderField('builder-format', 'สรุปเป็นตารางเปรียบเทียบชัดเจน พร้อมรายการ Checklist ขั้นตอนการปฏิบัติงานสำหรับเจ้าหน้าที่')" class="text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-700 px-2.5 py-1 rounded-md border border-slate-200 transition">ตารางสรุป + Checklist</button>
+                                    <button type="button" onclick="setBuilderField('builder-format', 'ภาษาเป็นกันเองแต่สุภาพ เข้าใจง่าย มี Emoji ประกอบ พร้อมโครงร่างสำหรับทำภาพ Infographic')" class="text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-700 px-2.5 py-1 rounded-md border border-slate-200 transition">ภาษาประชาสัมพันธ์ + Infographic</button>
+                                </div>
+                                <input type="text" id="builder-format" oninput="updateLivePrompt()" placeholder="เช่น ใช้ภาษาราชการตามระเบียบงานสารบรรณ แบ่งเป็น 1. เรื่องเดิม 2. ข้อเท็จจริง 3. ข้อเสนอ" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Live Generated Prompt Preview (1x1 Table) -->
+                        <div class="lg:col-span-5 space-y-4">
+                            <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-xl border border-slate-800 space-y-4 sticky top-24">
+                                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                        <h3 class="font-heading font-bold text-base">Prompt ที่พร้อมนำไปใช้งาน (1x1)</h3>
+                                    </div>
+                                    <button onclick="resetBuilder()" class="text-xs text-slate-400 hover:text-white">ล้างข้อมูล</button>
+                                </div>
+
+                                <div id="builder-output-box" class="bg-slate-950/90 border border-slate-800 rounded-xl p-4 text-sm text-slate-200 leading-relaxed whitespace-pre-line min-h-[220px]">
+                                    <!-- Live generated prompt -->
+                                </div>
+
+                                <div class="pt-2 space-y-2.5">
+                                    <button onclick="copyGeneratedPrompt()" class="w-full py-3 px-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-heading font-bold rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+                                        <i data-lucide="copy" class="w-4 h-4"></i>
+                                        <span>คัดลอกคำสั่ง Prompt นี้</span>
+                                    </button>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" class="py-2 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-heading rounded-lg flex items-center justify-center gap-1.5 transition border border-slate-700">
+                                            <span>เปิด Google Gemini</span>
+                                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                        </a>
+                                        <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" class="py-2 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-heading rounded-lg flex items-center justify-center gap-1.5 transition border border-slate-700">
+                                            <span>เปิด ChatGPT</span>
+                                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 3: INTERACTIVE POST-TEST QUIZ -->
+                <div id="view-quiz" class="space-y-6 hidden">
+                    <div class="bg-gradient-to-r from-emerald-800 via-teal-800 to-cyan-800 rounded-2xl p-6 sm:p-8 text-white shadow-lg">
+                        <div class="flex items-center justify-between">
+                            <span class="px-3 py-1 rounded-full text-xs font-heading font-bold bg-emerald-300 text-slate-950">
+                                การวัดผลและทบทวนองค์ความรู้ (Post-Test)
+                            </span>
+                            <button onclick="switchMainView('workshop')" class="text-xs font-heading bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg flex items-center gap-1 transition">
+                                <i data-lucide="arrow-left" class="w-4 h-4"></i> กลับสู่บทเรียน
+                            </button>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-bold mt-3">
+                            แบบทดสอบหลังการอบรม: การใช้ AI ในงานราชการและ อปท. อย่างมืออาชีพและปลอดภัย
+                        </h2>
+                        <p class="text-emerald-100 text-sm sm:text-base mt-1 max-w-3xl">
+                            ทดสอบความเข้าใจเรื่องโครงสร้าง Prompt 4 องค์ประกอบ, ระเบียบงานสารบรรณ, การคุ้มครองข้อมูลส่วนบุคคล (PDPA) และการตรวจสอบความถูกต้องของข้อมูล (Human-in-the-Loop)
+                        </p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-xs space-y-6">
+                        <div id="quiz-questions-container" class="space-y-6">
+                            <!-- Rendered via JS -->
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div id="quiz-score-banner" class="hidden flex-1 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 font-heading">
+                                <!-- Score summary -->
+                            </div>
+                            <div class="flex items-center gap-3 self-end sm:self-center">
+                                <button onclick="resetQuiz()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-100 font-heading text-sm font-medium transition">
+                                    ทำแบบทดสอบใหม่
+                                </button>
+                                <button onclick="submitQuiz()" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-heading text-sm font-bold shadow-md transition">
+                                    ตรวจคำตอบและดูเฉลย
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Data & Logic -->
+    <script>
+        // ==========================================
+        // 1. CURRICULUM DATA (All 7 Modules from Doc)
+        // ==========================================
+        const workshopsData = [
+            {
+                id: 'ws1',
+                code: 'Workshop 1',
+                shortTitle: 'หลักการเขียน Prompt งานราชการ',
+                title: 'Workshop 1 : หลักการเขียน Prompt ให้ AI เข้าใจงานราชการ',
+                icon: 'pen-tool',
+                description: 'เรียนรู้พื้นฐานสำคัญของการสื่อสารกับ AI (Prompt Engineering) โดยเน้นบริบทเฉพาะขององค์กรปกครองส่วนท้องถิ่น ผู้เข้าอบรมจะได้ฝึกการวางโครงสร้างคำสั่ง 4 องค์ประกอบหลัก เพื่อให้ AI เข้าใจธรรมเนียมปฏิบัติ คำราชาศัพท์ หรือระดับภาษาทางการที่ใช้ในหนังสือราชการไทย พร้อมเทคนิคการสั่งปรับแก้ (Follow-up Prompt) เมื่อผลลัพธ์แรกยังไม่ตรงตามต้องการ',
+                topics: [
+                    'การกำหนดบทบาท (Role) วัตถุประสงค์ (Objective) รูปแบบภาษา (Tone) และผลลัพธ์ที่ต้องการ (Output)',
+                    'ประเภทของหนังสือราชการทั้ง 6 ชนิด ตามระเบียบสำนักนายกรัฐมนตรีว่าด้วยงานสารบรรณ พ.ศ. 2526',
+                    'การเขียน Prompt สำหรับหนังสือภายนอก บันทึกข้อความ หนังสือประทับตรา คำสั่ง ประกาศ และรายงานการประชุม',
+                    'การปรับแก้คำสั่ง (Iterative Prompting) เพื่อให้ได้ผลลัพธ์ที่ถูกต้องและใช้งานได้จริงตามระเบียบงานสารบรรณ'
+                ],
+                hasGovDocsSection: true,
+                govDocTypes: [
+                    {
+                        num: '1. หนังสือภายนอก',
+                        desc: 'ติดต่อระหว่างส่วนราชการ หรือหน่วยงานภายนอก/บุคคลภายนอก',
+                        paper: 'กระดาษตราครุฑ (ครุฑสูง 3 ซม.) ลงนามโดยหัวหน้าส่วนราชการ',
+                        promptIndex: 0
+                    },
+                    {
+                        num: '2. หนังสือภายใน',
+                        desc: 'ติดต่อภายในกระทรวง กรม จังหวัดเดียวกัน หรือภายใน อปท.',
+                        paper: 'กระดาษบันทึกข้อความ (ครุฑสูง 1.5 ซม.) แบบพิธีน้อยกว่าหนังสือภายนอก',
+                        promptIndex: 1
+                    },
+                    {
+                        num: '3. หนังสือประทับตรา',
+                        desc: 'ใช้ประทับตราแทนการลงลายมือชื่อในเรื่องไม่สำคัญมาก เช่น นำส่งเอกสาร/แจ้งเตือน',
+                        paper: 'กระดาษตราครุฑ ประทับตราชื่อส่วนราชการและลงนามย่อกำกับ',
+                        promptIndex: 2
+                    },
+                    {
+                        num: '4. หนังสือสั่งการ (3 ชนิด)',
+                        desc: 'ได้แก่ 4.1 คำสั่ง, 4.2 ระเบียบ และ 4.3 ข้อบังคับ ที่อาศัยอำนาจตามกฎหมาย',
+                        paper: 'ใช้กระดาษตราครุฑตามแบบคำสั่ง/ระเบียบ/ข้อบังคับ',
+                        promptIndex: 3
+                    },
+                    {
+                        num: '5. หนังสือประชาสัมพันธ์ (3 ชนิด)',
+                        desc: 'ได้แก่ 5.1 ประกาศ, 5.2 แถลงการณ์ และ 5.3 ข่าว เพื่อชี้แจงหรือเผยแพร่ให้ประชาชนทราบ',
+                        paper: 'กระดาษตราครุฑ (สำหรับประกาศ/แถลงการณ์)',
+                        promptIndex: 4
+                    },
+                    {
+                        num: '6. หนังสือที่เจ้าหน้าที่ทำขึ้น/รับไว้',
+                        desc: 'หลักฐานในราชการ ได้แก่ หนังสือรับรอง, รายงานการประชุม, บันทึก และหนังสืออื่นๆ',
+                        paper: 'ตามรูปแบบเฉพาะของเอกสารแต่ละชนิด',
+                        promptIndex: 5
+                    }
+                ],
+                structureTitle: 'โครงสร้าง Prompt มาตรฐานสำหรับงานราชการ:',
+                structureItems: [
+                    { label: 'บทบาท (Role)', text: 'กำหนดตำแหน่ง เช่น นักบริหารงานทั่วไป / นักจัดการงานทั่วไป ชำนาญการ' },
+                    { label: 'งานที่ต้องการให้ทำ (Task)', text: 'เช่น ร่างหนังสือภายนอก / ร่างบันทึกข้อความ / ร่างคำสั่ง / ร่างคำกล่าว' },
+                    { label: 'บริบทและข้อมูลสำคัญ (Context)', text: 'ระบุเรื่อง วัน เวลา สถานที่ วัตถุประสงค์ งบประมาณ ผู้รับหนังสือ และผู้ลงนาม' },
+                    { label: 'รูปแบบภาษาและผลลัพธ์ (Format)', text: 'ภาษาราชการตามระเบียบงานสารบรรณ กระชับ ชัดเจน แบ่งเป็น ส่วนที่ 1 ต้นเรื่อง, ส่วนที่ 2 เนื้อเรื่อง, ส่วนที่ 3 ลงท้าย' }
+                ],
+                prompts: [
+                    {
+                        title: 'ตัวอย่างที่ 1 (ประเภทที่ 1 หนังสือภายนอก - ขอความอนุเคราะห์วิทยากรจากหน่วยงานภายนอก)',
+                        role: 'นักจัดการงานทั่วไปชำนาญการ สังกัดสำนักปลัด เทศบาลตำบลเมืองใหม่',
+                        task: 'ร่างหนังสือราชการภายนอก (ใช้กระดาษตราครุฑ) ถึงอธิการบดีมหาวิทยาลัยราชภัฏในพื้นที่ เพื่อขอความอนุเคราะห์บุคลากรเป็นวิทยากร',
+                        context: 'โครงการฝึกอบรมการประยุกต์ใช้ AI ในงานราชการ วันศุกร์ที่ 15 พฤศจิกายน 2569 เวลา 09.00 - 16.00 น. ณ ห้องประชุมเทศบาลตำบลเมืองใหม่ ผู้ลงนามคือนายกเทศมนตรีตำบลเมืองใหม่',
+                        format: 'ภาษาราชการตามระเบียบสำนักนายกรัฐมนตรีว่าด้วยงานสารบรรณ พ.ศ. 2526 แบ่งเป็น 1. เหตุที่มีหนังสือไป 2. จุดประสงค์ที่ต้องการ 3. คำลงท้าย (ขอแสดงความนับถือ)'
+                    },
+                    {
+                        title: 'ตัวอย่างที่ 2 (ประเภทที่ 2 หนังสือภายใน - บันทึกข้อความขออนุมัติจัดโครงการ)',
+                        role: 'นักจัดการงานทั่วไปชำนาญการ สังกัดสำนักปลัด เทศบาลตำบลเมืองใหม่',
+                        task: 'ร่างหนังสือภายใน (กระดาษบันทึกข้อความ) เสนอต่อนายกเทศมนตรีตำบลเมืองใหม่',
+                        context: 'เรื่อง ขออนุมัติจัดโครงการฝึกอบรมการใช้ AI ในงานราชการ ประจำปีงบประมาณ พ.ศ. 2569 ในวันศุกร์ที่ 15 พฤศจิกายน 2569 ณ ห้องประชุมเทศบาลฯ กลุ่มเป้าหมายคือพนักงานเทศบาลจำนวน 50 คน งบประมาณ 15,000 บาท',
+                        format: 'ใช้ภาษาราชการที่ถูกต้องตามระเบียบงานสารบรรณ แบ่งเนื้อหาเป็น 1. เรื่องเดิม 2. ข้อเท็จจริง 3. ข้อพิจารณาและข้อเสนอ'
+                    },
+                    {
+                        title: 'ตัวอย่างที่ 3 (ประเภทที่ 3 หนังสือประทับตรา - การนำส่งเอกสาร/แบบตอบรับเรื่องทั่วไป)',
+                        role: 'เจ้าหน้าที่บริหารงานทั่วไป ปฏิบัติงานสารบรรณกลาง',
+                        task: 'ร่างหนังสือประทับตรา สำหรับนำส่งสรุปรายงานสถิติข้อมูลประจำเดือนและแบบตอบรับการเข้าร่วมประชุม',
+                        context: 'ส่งถึงส่วนราชการที่เกี่ยวข้องในจังหวัด อ้างถึงหนังสือแจ้งเวียนของจังหวัด เพื่อจัดส่งเอกสารตามกำหนดเวลา',
+                        format: 'รูปแบบหนังสือประทับตราตามระเบียบงานสารบรรณ (ระบุ ที่, ถึง, เนื้อความกระชับตรงประเด็น, ชื่อส่วนราชการที่ส่งออก และวันที่)'
+                    },
+                    {
+                        title: 'ตัวอย่างที่ 4 (ประเภทที่ 4 หนังสือสั่งการ - การร่างคำสั่งแต่งตั้งคณะทำงาน)',
+                        role: 'นักทรัพยากรบุคคลชำนาญการ สังกัดสำนักปลัด เทศบาลตำบลเมืองใหม่',
+                        task: 'ร่างหนังสือสั่งการ ประเภท "คำสั่ง" เรื่อง แต่งตั้งคณะทำงานขับเคลื่อนการใช้เทคโนโลยีดิจิทัลและปัญญาประดิษฐ์ (AI) ของเทศบาลตำบลเมืองใหม่',
+                        context: 'อาศัยอำนาจตาม พ.ร.บ. เทศบาล พ.ศ. 2496 และที่แก้ไขเพิ่มเติม โดยมีปลัดเทศบาลเป็นประธานคณะทำงาน ผู้อำนวยการทุกกองเป็นคณะทำงาน และหัวหน้าฝ่ายอำนวยการเป็นเลขานุการ',
+                        format: 'รูปแบบคำสั่งราชการ ประกอบด้วย 1. ส่วนหัวคำสั่ง 2. เนื้อความ (ปรารภเหตุผล, องค์ประกอบคณะทำงาน, อำนาจหน้าที่) 3. ส่วนท้าย (ทั้งนี้ ตั้งแต่บัดนี้เป็นต้นไป สั่ง ณ วันที่... ลงนามโดยนายกเทศมนตรี)'
+                    },
+                    {
+                        title: 'ตัวอย่างที่ 5 (ประเภทที่ 5 หนังสือประชาสัมพันธ์ - การร่างประกาศเทศบาล)',
+                        role: 'นักประชาสัมพันธ์ชำนาญการ เทศบาลตำบลเมืองใหม่',
+                        task: 'ร่างหนังสือประชาสัมพันธ์ ประเภท "ประกาศ" เรื่อง กำหนดการออกให้บริการจัดเก็บภาษีเคลื่อนที่และรับลงทะเบียนผู้สูงอายุ ประจำปี พ.ศ. 2569',
+                        context: 'ออกให้บริการทุกวันพุธตลอดเดือนพฤศจิกายน 2569 เวลา 09.00 - 15.00 น. ณ ศาลาประชาคมหมู่ที่ 1 ถึงหมู่ที่ 5 เอกสารที่ต้องเตรียมได้แก่ บัตรประจำตัวประชาชน และสำเนาทะเบียนบ้าน',
+                        format: 'รูปแบบประกาศราชการ (ประกาศเทศบาลตำบลเมืองใหม่ เรื่อง..., เนื้อความชี้แจงรายละเอียดชัดเจน, จึงประกาศให้ทราบโดยทั่วกัน, ประกาศ ณ วันที่...)'
+                    },
+                    {
+                        title: 'ตัวอย่างที่ 6 (ประเภทที่ 6 หนังสือที่เจ้าหน้าที่ทำขึ้นหรือรับไว้เป็นหลักฐานในราชการ)',
+                        role: 'นักจัดการงานทั่วไปชำนาญการ เลขานุการที่ประชุม',
+                        task: 'ร่างเอกสารหลักฐานในราชการ 2 รูปแบบ ได้แก่ 1) หนังสือรับรองการปฏิบัติงานของคณะวิทยากร และ 2) โครงร่างรายงานการประชุมคณะทำงานขับเคลื่อน AI ครั้งที่ 1/2569',
+                        context: 'ประชุมเมื่อวันที่ 1 พฤศจิกายน 2569 ณ ห้องประชุมเทศบาลฯ มีวาระสำคัญคือการพิจารณาแผนการจัดอบรม AI และการกำหนดแนวทางคุ้มครองข้อมูลส่วนบุคคล (PDPA)',
+                        format: 'ถูกต้องตามแบบหนังสือรับรองและรูปแบบรายงานการประชุมราชการ (ระเบียบวาระที่ 1 - 5 สรุปสาระสำคัญและมติที่ประชุมชัดเจน)'
+                    },
+                    {
+                        title: 'ตัวอย่างที่ 7 (พิเศษ: การร่างคำกล่าวรายงานและคำกล่าวเปิดงาน)',
+                        role: 'นักประชาสัมพันธ์ชำนาญการ',
+                        task: 'ร่างคำกล่าวรายงานของปลัดเทศบาล และคำกล่าวเปิดงานของนายกเทศมนตรี',
+                        context: 'พิธีเปิดโครงการ "ท้องถิ่นไทยใส่ใจสิ่งแวดล้อม คัดแยกขยะต้นทาง" จัดขึ้นในวันที่ 20 พฤศจิกายน 2569 โดยมีผู้นำชุมชนและประชาชนเข้าร่วม 100 คน',
+                        format: 'ภาษาสุภาพ เป็นทางการ สร้างแรงบันดาลใจ และความยาวเหมาะสมกับการอ่านประมาณ 3 นาที'
+                    }
+                ],
+                outputs: [
+                    {
+                        title: 'ตัวอย่างผลลัพธ์ที่ได้จาก AI (การร่างบันทึกข้อความขออนุมัติจัดโครงการ)',
+                        content: `บันทึกข้อความ
+ส่วนราชการ: สำนักปลัด เทศบาลตำบลเมืองใหม่ โทร. 0-xxxx-xxxx
+ที่: มม 52001/-                                  วันที่: 1 พฤศจิกายน 2569
+เรื่อง: ขออนุมัติจัดโครงการฝึกอบรมการใช้ AI ในงานราชการ ประจำปีงบประมาณ พ.ศ. 2569
+เรียน: นายกเทศมนตรีตำบลเมืองใหม่
+
+1. เรื่องเดิม
+ตามที่เทศบาลตำบลเมืองใหม่ ได้ตราเทศบัญญัติงบประมาณรายจ่ายประจำปีงบประมาณ พ.ศ. 2569 โดยกำหนดแผนงานบริหารงานทั่วไป โครงการพัฒนาศักยภาพบุคลากรด้วยเทคโนโลยีดิจิทัล เพื่อยกระดับประสิทธิภาพการปฏิบัติราชการและการบริการประชาชน นั้น
+
+2. ข้อเท็จจริง
+สำนักปลัด ได้จัดทำรายละเอียดโครงการฝึกอบรมการใช้ AI ในงานราชการ ประจำปีงบประมาณ พ.ศ. 2569 โดยมีกำหนดจัดฝึกอบรมในวันศุกร์ที่ 15 พฤศจิกายน 2569 เวลา 08.30 – 16.30 น. ณ ห้องประชุมเทศบาลตำบลเมืองใหม่ กลุ่มเป้าหมายประกอบด้วย พนักงานเทศบาลและพนักงานจ้าง จำนวน 50 คน โดยใช้งบประมาณดำเนินการทั้งสิ้น 15,000 บาท (หนึ่งหมื่นห้าพันบาทถ้วน) รายละเอียดปรากฏตามโครงการที่แนบมาพร้อมนี้
+
+3. ข้อพิจารณาและข้อเสนอ
+จึงเรียนมาเพื่อโปรดพิจารณา หากเห็นชอบโปรดอนุมัติให้ดำเนินโครงการดังกล่าวตามรายละเอียดที่เสนอ
+
+(ลงชื่อ) ...........................................
+(...........................................)
+นักจัดการงานทั่วไปชำนาญการ`
+                    }
+                ]
+            },
+            {
+                id: 'ws2',
+                code: 'Workshop 2',
+                shortTitle: 'AI จัดทำและสรุปเอกสาร อปท.',
+                title: 'Workshop 2 : AI ช่วยจัดทำเอกสารราชการ / สรุปเอกสาร / งานประจำของ อปท.',
+                icon: 'file-text',
+                description: 'ฝึกปฏิบัติการนำ AI มาลดภาระงานเอกสารประจำวันของ อปท. ตั้งแต่งานสารบรรณ งานเขียนโครงการ ไปจนถึงการจัดการกับเอกสารขนาดใหญ่ เช่น หนังสือเวียนจากกรมส่งเสริมการปกครองท้องถิ่น (สถ.) หรือระเบียบกระทรวงมหาดไทย โดยใช้ฟีเจอร์อัปโหลดไฟล์เพื่อให้ AI สกัดเฉพาะสิ่งที่ อปท. ต้องปฏิบัติ พร้อมสร้างตาราง Checklist เพื่อกันการตกหล่นในการทำงาน',
+                topics: [
+                    'การร่างหนังสือราชการและบันทึกข้อความ และการสรุปหนังสือเวียน/ระเบียบที่เกี่ยวข้อง',
+                    'การจัดทำรายงานการประชุม การจัดทำร่างโครงการ แผนงาน และคำชี้แจงงบประมาณ',
+                    'การตรวจทานภาษาให้เป็นทางการ เหมาะสมกับงานราชการ',
+                    'การ Upload PDF/Word เพื่อสรุปสาระสำคัญ เปรียบเทียบเอกสาร ถาม-ตอบจากเอกสาร และทำ Checklist'
+                ],
+                structureTitle: 'โครงสร้าง Prompt สำหรับงานเอกสารและสรุประเบียบ:',
+                structureItems: [
+                    { label: 'คำสั่งหลัก', text: 'สรุปเอกสาร / เปรียบเทียบ / ร่างโครงการ / ตรวจทานภาษา' },
+                    { label: 'แหล่งข้อมูล', text: 'จากไฟล์แนบ (PDF/Word) หรือ ข้อความที่วางด้านล่าง' },
+                    { label: 'ประเด็นที่ต้องการเน้น', text: 'เช่น สิ่งที่ อปท. ต้องดำเนินการ, กรอบเวลา (Deadline), ข้อควรระวัง, หรือการปรับแก้คำให้เป็นภาษาราชการ' },
+                    { label: 'รูปแบบการนำเสนอ', text: 'ตารางสรุป / Bullet Points / Checklist ขั้นตอนการทำงาน' }
+                ],
+                prompts: [
+                    {
+                        title: 'ตัวอย่างที่ 1 (การสรุปหนังสือเวียนและทำ Checklist จากไฟล์ PDF)',
+                        role: 'เจ้าหน้าที่ผู้รับผิดชอบงานสารบรรณและสรุประเบียบ',
+                        task: 'สรุปสาระสำคัญสำหรับผู้บริหารภายใน 1 หน้ากระดาษ และสร้างตาราง Checklist ขั้นตอนการปฏิบัติงาน',
+                        context: 'จากไฟล์ PDF หนังสือเวียนกรมส่งเสริมการปกครองท้องถิ่นที่แนบมานี้',
+                        format: 'แบ่งเป็น 1) วัตถุประสงค์ของหนังสือเวียน 2) สิ่งที่ อปท. ต้องดำเนินการ 3) กำหนดเวลา (Deadline) และตาราง Checklist ขั้นตอนการปฏิบัติงานสำหรับเจ้าหน้าที่'
+                    },
+                    {
+                        title: 'ตัวอย่างที่ 2 (การจัดทำรายงานการประชุมจากบันทึกย่อและตรวจทานภาษา)',
+                        role: 'เจ้าหน้าที่ผู้จัดทำรายงานการประชุม กองคลัง',
+                        task: 'เรียบเรียงบันทึกย่อจากการประชุมประจำเดือนให้เป็น "รายงานการประชุม"',
+                        context: 'ข้อความบันทึกย่อจากการประชุมประจำเดือนของกองคลัง [วางข้อความบันทึกย่อจากการประชุม]',
+                        format: 'ตามรูปแบบมาตรฐานราชการ (ระเบียบวาระที่ 1 - 5) ปรับปรุงถ้อยคำให้เป็นภาษาราชการที่สละสลวย เป็นทางการ และสรุปมติที่ประชุมในแต่ละวาระให้ชัดเจน'
+                    }
+                ],
+                outputs: [
+                    {
+                        title: 'ตัวอย่างผลลัพธ์ที่ได้จาก AI (จากตัวอย่างที่ 1 - สรุปหนังสือเวียน สถ. และทำ Checklist)',
+                        content: `สรุปสาระสำคัญหนังสือเวียน สถ. (สำหรับผู้บริหาร)
+• เรื่อง: แนวทางการเตรียมความพร้อมรับมือภัยแล้งของ อปท. ประจำปี พ.ศ. 2569
+• สาระสำคัญ: ให้ อปท. สำรวจพื้นที่เสี่ยงขาดแคลนน้ำอุปโภคบริโภค และจัดตั้งศูนย์ช่วยเหลือประชาชนระดับท้องถิ่น
+• สิ่งที่ อปท. ต้องดำเนินการ: สำรวจแหล่งน้ำ จัดทำแผนเผชิญเหตุ และรายงานผลให้จังหวัดทราบ
+• กำหนดเวลา: ภายในวันที่ 30 พฤศจิกายน 2569
+
+Checklist ขั้นตอนการปฏิบัติงานสำหรับเจ้าหน้าที่:
+1. [ ] สำรวจข้อมูลแหล่งน้ำและพื้นที่เสี่ยงภัยแล้งในเขตพื้นที่รับผิดชอบ (ผู้รับผิดชอบ: งานป้องกันฯ)
+2. [ ] ร่างคำสั่งจัดตั้งศูนย์ช่วยเหลือประชาชนของ อปท. เสนอนายกฯ ลงนาม (ผู้รับผิดชอบ: สำนักปลัด)
+3. [ ] ประชาสัมพันธ์ช่องทางแจ้งขอรับความช่วยเหลือเรื่องน้ำแก่ประชาชน (ผู้รับผิดชอบ: งานประชาสัมพันธ์)
+4. [ ] จัดทำหนังสือรายงานผลการเตรียมความพร้อมส่งอำเภอ/จังหวัด ภายใน 30 พ.ย. 69 (ผู้รับผิดชอบ: สำนักปลัด)`
+                    }
+                ]
+            },
+            {
+                id: 'ws3',
+                code: 'Workshop 3',
+                shortTitle: 'AI เพื่อการประชาสัมพันธ์',
+                title: 'Workshop 3 : AI เพื่อการประชาสัมพันธ์และการสื่อสารกับประชาชน',
+                icon: 'megaphone',
+                description: 'ยกระดับการสื่อสารของ อปท. จากภาษาราชการที่เข้าใจยาก ให้กลายเป็นภาษาที่เข้าถึงประชาชนได้ง่าย ทันสมัย และน่าสนใจ ครอบคลุมทั้งการเขียนข่าวกิจกรรม การแจ้งเตือนภัยพิบัติหรือกำหนดการชำระภาษี การตอบข้อร้องเรียนอย่างสร้างสรรค์และลดแรงปะทะ รวมถึงการเขียน Prompt สั่ง AI สร้างภาพประกอบ โปสเตอร์ และโครงร่างอินโฟกราฟิกเพื่อนำไปใช้ผลิตสื่อได้อย่างรวดเร็ว',
+                topics: [
+                    'การใช้ AI ช่วยเขียนข่าวประชาสัมพันธ์ ข้อความประกาศ แจ้งเตือน และสื่อสารข้อมูลราชการ',
+                    'การออกแบบเนื้อหาโพสต์ พาดหัวข่าว และสคริปต์สำหรับ Facebook, LINE OA และสื่อประชาสัมพันธ์ของ อปท.',
+                    'การใช้ AI ช่วยตอบคำถามประชาชนอย่างเหมาะสมและเป็นทางการ เข้าใจง่าย ลดความคลาดเคลื่อน',
+                    'การใช้คำสั่ง Prompt สร้างภาพ Poster, Infographic และ Presentation'
+                ],
+                structureTitle: 'โครงสร้าง Prompt สำหรับงานประชาสัมพันธ์และการสื่อสาร:',
+                structureItems: [
+                    { label: 'บทบาท', text: 'นักประชาสัมพันธ์ยุคใหม่ของ อปท. / แอดมินเพจหน่วยงาน' },
+                    { label: 'ช่องทางและกลุ่มเป้าหมาย', text: 'เช่น โพสต์ Facebook / บรอดแคสต์ LINE OA สำหรับประชาชนในพื้นที่' },
+                    { label: 'เนื้อหาหลัก', text: 'กิจกรรม / ประกาศแจ้งเตือนชำระภาษี / คำถามหรือข้อร้องเรียนจากประชาชน' },
+                    { label: 'โทนการสื่อสาร (Tone of Voice)', text: 'เป็นกันเองแต่สุภาพ กระชับ เข้าใจง่าย มี Emoji ประกอบ พร้อม Call to Action หรือช่องทางติดต่อ' }
+                ],
+                prompts: [
+                    {
+                        title: 'ตัวอย่างที่ 1 (การเขียนโพสต์ Facebook แจ้งเตือนชำระภาษีที่ดินและสิ่งปลูกสร้าง)',
+                        role: 'แอดมินเพจ Facebook ขององค์การบริหารส่วนตำบล',
+                        task: 'เขียนโพสต์ประชาสัมพันธ์เชิญชวนประชาชนมาชำระภาษีที่ดินและสิ่งปลูกสร้าง ประจำปี 2569 และออกแบบโครงร่างข้อความสำหรับทำภาพ Infographic 1 ภาพ',
+                        context: 'กำหนดชำระภายในเดือนเมษายน 2569 ช่องทางการชำระเงิน (ชำระด้วยตนเองที่กองคลัง หรือสแกน QR Code)',
+                        format: 'พาดหัวที่น่าสนใจ อ่านเข้าใจง่าย ใช้ Emoji ประกอบให้ดูเป็นมิตร',
+                        link: 'https://share.gemini.google/dSosLQzNJR6n'
+                    },
+                    {
+                        title: 'ตัวอย่างที่ 2 (การตอบคำถาม/ข้อร้องเรียนประชาชน และสร้าง Prompt วาดภาพ Poster)',
+                        role: 'แอดมินผู้ดูแลการสื่อสารและตอบข้อร้องเรียนของ อปท.',
+                        task: '1) ร่างข้อความตอบกลับประชาชนเรื่องไฟกิ่งชำรุด 2) เขียน Prompt ภาษาอังกฤษสำหรับสร้างภาพโปสเตอร์รณรงค์',
+                        context: '1) ไฟกิ่งส่องสว่างริมถนนชำรุดบริเวณหมู่ที่ 3 ขอพิกัดเพิ่มเติม 2) โปสเตอร์รณรงค์ "งดเผาขยะและตอซังข้าว ลดฝุ่น PM 2.5 ในชุมชน"',
+                        format: '1) ภาษาที่สุภาพ แสดงความห่วงใย แจ้งขั้นตอนประสานงานกองช่าง 2) สไตล์ 3D Pixar Illustration สีสันสดใส เข้าใจง่าย',
+                        link: 'https://share.gemini.google/dSosLQzNJR6n'
+                    }
+                ],
+                outputs: [
+                    {
+                        title: 'ตัวอย่างผลลัพธ์ที่ 1: โพสต์ Facebook ประชาสัมพันธ์ภาษีที่ดินฯ และโครงร่าง Infographic',
+                        content: `📢 [ประชาสัมพันธ์] ขอเชิญชวนพี่น้องชาวตำบล ร่วมใจชำระภาษีที่ดินและสิ่งปลูกสร้าง ประจำปี พ.ศ. 2569 🏡🏢✨
+สวัสดีครับ/ค่ะ พี่น้องชาวตำบลของเราทุกท่าน! 🙏💚 ถึงรอบปีภาษีที่ดินและสิ่งปลูกสร้าง ประจำปี 2569 แล้วนะครับ/ค่ะ!
+
+📅 กำหนดชำระเงิน: ตั้งแต่วันนี้ - ภายในเดือนเมษายน 2569 นี้เท่านั้น ⏳ (อย่าลืมมาจ่ายกันให้ทันตามกำหนดเพื่อหลีกเลี่ยงค่าปรับและเงินเพิ่มนะครับ/คะ 😊)
+📲 ช่องทางการชำระเงิน สะดวกสบาย เลือกได้ตามที่สะดวก:
+1️⃣ ชำระด้วยตนเอง ณ กองคลัง อบต. ในวันและเวลาราชการ (08.30 - 16.30 น.)
+2️⃣ สแกน QR Code ง่ายๆ สแกนปุ๊บ จ่ายปั๊บ ไม่ต้องเดินทาง!
+
+💭 “ภาษีของท่าน พัฒนาท้องถิ่นเรา” เงินภาษีทุกบาทจะถูกนำกลับมาพัฒนาถนนหนทาง ไฟส่องสว่าง แหล่งน้ำ และระบบสาธารณูปโภคต่างๆ เพื่อคุณภาพชีวิตที่ดีขึ้นของพวกเราชาวตำบล 💚
+📞 สอบถามข้อมูลเพิ่มเติม: กองคลัง โทร. 0X-XXX-XXXX หรือส่งข้อความทาง Inbox เพจนี้ได้เลยครับ/ค่ะ!
+
+[โครงร่างข้อมูลสำหรับทำภาพ Infographic]
+• ส่วนที่ 1 (บนสุด): ตราสัญลักษณ์ (โลโก้ อบต.) และชื่อหน่วยงาน
+• ส่วนที่ 2 (หัวข้อหลัก): "ขอเชิญชวนชำระ ภาษีที่ดินและสิ่งปลูกสร้าง ประจำปี 2569"
+• ส่วนที่ 3 (กำหนดเวลา): กล่องเน้นย้ำพร้อมไอคอนปฏิทิน "ภายในเดือน เมษายน 2569"
+• ส่วนที่ 4 (ช่องทางชำระเงิน): แยกฝั่งซ้าย (ชำระ ณ กองคลัง) และฝั่งขวา (สแกน QR Code)
+• ส่วนที่ 5 (ท้ายภาพ): สโลแกน "ภาษีของท่าน พัฒนาท้องถิ่นเรา"`
+                    },
+                    {
+                        title: 'ตัวอย่างผลลัพธ์ที่ 2: ข้อความตอบกลับประชาชนเรื่องไฟกิ่งชำรุด & Prompt สร้างภาพ 3D Pixar',
+                        content: `1) ข้อความตอบกลับประชาชน (เรื่องไฟกิ่งชำรุด หมู่ที่ 3):
+"เรียน คุณ [ชื่อผู้แจ้งเรื่อง] 🙏💚
+องค์การบริหารส่วนตำบล [ใส่ชื่อ อปท.] ต้องขอขอบพระคุณเป็นอย่างสูงที่ท่านได้กรุณาแจ้งข้อมูลเรื่องไฟกิ่งส่องสว่างชำรุดในพื้นที่หมู่ที่ 3 เข้ามานะครับ/ค่ะ ทางเรามีความห่วงใยในความปลอดภัยในการเดินทางยามค่ำคืนของพี่น้องประชาชนทุกท่านเป็นอย่างมาก
+
+เพื่อให้เจ้าหน้าที่สามารถเข้าตรวจสอบและซ่อมแซมได้อย่างตรงจุดที่สุด แอดมินขอความอนุเคราะห์ข้อมูลเพิ่มเติม ดังนี้ครับ/ค่ะ:
+📍 พิกัดหรือสถานที่ใกล้เคียงที่ชัดเจน (เช่น จุดสังเกตใกล้บ้านเลขที่ หรือหมายเลขเสาไฟกิ่ง)
+📸 ภาพถ่ายจุดที่ชำรุด (ถ้ามี)
+หลังจากได้รับข้อมูลแล้ว แอดมินจะรีบประสานงานต่อไปยัง “กองช่าง” เพื่อส่งทีมช่างลงพื้นที่แก้ไขโดยเร็วที่สุดครับ/ค่ะ 🛠️"
+
+2) Prompt ภาษาอังกฤษสำหรับสร้างภาพโปสเตอร์รณรงค์ (3D Pixar Style):
+Prompt: A vibrant 3D Pixar-style digital campaign poster with a colorful, warm, and friendly animated look, featuring the title 'งดเผาขยะ และตอซังข้าว' in large, bold, colorful 3D Thai letters at the top, and 'ลดฝุ่น PM 2.5 ในชุมชน' below it. The scene shows a bustling Thai rural community under a bright, clear blue sky. On the left, a friendly 3D animated farmer wearing a traditional hat is driving a blue tractor, joyfully tilling rice stubble back into the soil instead of burning it. On the right, a Thai family with happy children and elderly members is sorting garbage into colorful recycling bins.`
+                    }
+                ]
+            },
+            {
+                id: 'ws4',
+                code: 'Workshop 4',
+                shortTitle: 'AI วิเคราะห์แผนและยุทธศาสตร์',
+                title: 'Workshop 4 : AI กับการวิเคราะห์ งานบริหาร การวางแผน และยุทธศาสตร์ระดับท้องถิ่น',
+                icon: 'bar-chart-3',
+                description: 'เรียนรู้การใช้ AI เป็นที่ปรึกษาเชิงกลยุทธ์และการบริหารงานท้องถิ่น เน้นการวิเคราะห์ข้อมูลรายกอง/ฝ่าย การทำ SWOT Analysis ของพื้นที่เพื่อจัดทำแผนพัฒนาท้องถิ่น การวิเคราะห์เปรียบเทียบสถิติการจัดเก็บรายได้หรือการเบิกจ่ายงบประมาณ และการสังเคราะห์ข้อมูลจำนวนมากให้เป็นบทสรุปสำหรับผู้บริหาร (Executive Summary) เพื่อประกอบการตัดสินใจอย่างแม่นยำ',
+                topics: [
+                    'AI กับงานสำนักปลัด กองคลัง พัสดุ แผนงาน จัดเก็บรายได้ และงานบริการประชาชน',
+                    'การใช้ AI กับการวิเคราะห์งานบริหาร การวางแผน และยุทธศาสตร์ระดับท้องถิ่น (SWOT & KPIs)',
+                    'การนำ AI ช่วยทำงานในกรอบการทำงานของผู้บริหาร และการจัดทำรายงานนำเสนอผู้บริหาร (Executive Summary)'
+                ],
+                structureTitle: 'โครงสร้าง Prompt สำหรับงานวิเคราะห์และวางแผนยุทธศาสตร์:',
+                structureItems: [
+                    { label: 'บทบาท', text: 'นักวิเคราะห์นโยบายและแผนชำนาญการ / ที่ปรึกษาผู้บริหาร อปท.' },
+                    { label: 'ข้อมูลตั้งต้น', text: 'ข้อมูลสภาพพื้นที่, สถิติรายได้/งบประมาณย้อนหลัง, ปัญหาความเดือดร้อนของประชาชน' },
+                    { label: 'โจทย์การวิเคราะห์', text: 'วิเคราะห์ SWOT, เสนอโครงการตามยุทธศาสตร์, วิเคราะห์คอขวดงบประมาณ หรือสรุปทางเลือกเชิงนโยบาย' },
+                    { label: 'รูปแบบผลลัพธ์', text: 'ตารางเปรียบเทียบ, แผนงานระยะสั้น-ยาว พร้อม KPI, หรือบทสรุปผู้บริหาร (Executive Summary)' }
+                ],
+                prompts: [
+                    {
+                        title: 'ตัวอย่างที่ 1 (การวิเคราะห์ SWOT และเสนอโครงการบรรจุในแผนพัฒนาท้องถิ่น)',
+                        role: 'นักวิเคราะห์นโยบายและแผนชำนาญการ',
+                        task: 'วิเคราะห์ SWOT Analysis และเสนอชื่อโครงการใหม่ๆ จำนวน 5 โครงการ',
+                        context: 'เทศบาลพื้นที่กึ่งเมืองกึ่งชนบท มีประชากรผู้สูงอายุ 28% มีแหล่งท่องเที่ยวทางวัฒนธรรมริมน้ำ แต่ประสบปัญหาขยะตกค้างและขาดแคลนรายได้เสริมในครัวเรือน',
+                        format: 'โครงการสอดคล้องกับยุทธศาสตร์การพัฒนาคุณภาพชีวิตและการท่องเที่ยว พร้อมระบุตัวชี้วัดความสำเร็จ (KPI)',
+                        link: 'https://share.gemini.google/WF9PLkdQwRyY'
+                    },
+                    {
+                        title: 'ตัวอย่างที่ 2 (การจัดทำรายงานสรุปผลการเบิกจ่ายงบประมาณเสนอผู้บริหาร)',
+                        role: 'นักวิเคราะห์/ผู้ช่วยผู้บริหารด้านงบประมาณ',
+                        task: 'วิเคราะห์สาเหตุที่ทำให้การเบิกจ่ายภาพรวมล่าช้า และร่าง "รายงานสรุปสำหรับผู้บริหาร (Executive Summary)"',
+                        context: 'ข้อมูลการเบิกจ่ายงบ 5 ปีย้อนหลัง (พ.ศ. 2565 - 2569 วงเงินรวม 220.20 ล้านบาท จากไฟล์ Google Sheets)',
+                        format: 'รายงานสรุปผู้บริหาร กระชับ ชัดเจน พร้อมข้อเสนอแนะเชิงบริหาร 3 ข้อ เพื่อเร่งรัดการเบิกจ่ายในไตรมาสที่ 3',
+                        link: 'https://share.gemini.google/ouhtGVZaC05y'
+                    }
+                ],
+                outputs: [
+                    {
+                        title: 'ตัวอย่างผลลัพธ์ที่ 1: การวิเคราะห์ SWOT Analysis และข้อเสนอโครงการใหม่ 5 โครงการ',
+                        content: `การวิเคราะห์สภาพแวดล้อมทางยุทธศาสตร์ (SWOT Analysis)
+• จุดแข็ง (S): มีต้นทุนทางวัฒนธรรมริมน้ำที่เป็นเอกลักษณ์, เดินทางสะดวก, ผู้สูงอายุ (28%) มีภูมิปัญญาท้องถิ่นทรงคุณค่า
+• จุดอ่อน (W): ปัญหาขยะตกค้างกระทบทัศนียภาพริมน้ำ, ขาดแคลนรายได้เสริมในครัวเรือน, ภาระพึ่งพิงสังคมสูงวัย
+• โอกาส (O): เทรนด์ท่องเที่ยววิถีชุมชนได้รับความนิยม, นโยบายรัฐสนับสนุนเศรษฐกิจหมุนเวียน (Circular Economy)
+• อุปสรรค (T): ความเสื่อมโทรมของสิ่งแวดล้อมหากนักท่องเที่ยวเพิ่มโดยไร้ระบบจัดการขยะ, เศรษฐกิจผันผวน
+
+ข้อเสนอโครงการใหม่ 5 โครงการเพื่อการพัฒนาที่ยั่งยืน:
+1. โครงการ "ผู้สูงวัยสืบสานวิถีริมน้ำ สร้างรายได้ด้วยภูมิปัญญาท้องถิ่น" (KPI: รายได้เสริมผู้สูงอายุเพิ่มขึ้นอย่างน้อย 15% ต่อครัวเรือน)
+2. โครงการ "ตลาดริมน้ำขยะเป็นศูนย์ (Zero Waste Waterfront Market)" (KPI: ขยะตกค้างริมน้ำลดลงไม่น้อยกว่า 40% ภายใน 1 ปี)
+3. โครงการ "ธนาคารขยะชุมชน เปลี่ยนขยะเป็นสวัสดิการผู้สูงอายุ" (KPI: ขยะรีไซเคิลถูกคัดแยกเพิ่มขึ้น 30 ตัน/ปี)
+4. โครงการ "เส้นทางท่องเที่ยววิถีวัฒนธรรมริมน้ำยั่งยืน (Green & Cultural Canal Tour)" (KPI: นักท่องเที่ยวเพิ่มขึ้นร้อยละ 20 ต่อปี)
+5. โครงการ "ศูนย์นวัตกรรมอาชีพและแปรรูปอาหารริมน้ำ" (KPI: พัฒนาผลิตภัณฑ์ชุมชนใหม่ที่ได้มาตรฐานอย่างน้อย 10 ผลิตภัณฑ์)`
+                    },
+                    {
+                        title: 'ตัวอย่างผลลัพธ์ที่ 2: รายงานสรุปสำหรับผู้บริหาร (Executive Summary) วิเคราะห์งบประมาณ 5 ปี',
+                        content: `รายงานสรุปสำหรับผู้บริหาร (Executive Summary)
+เรื่อง: การวิเคราะห์สาเหตุการเบิกจ่ายงบประมาณล่าช้าและแนวทางการเร่งรัดการเบิกจ่ายในไตรมาสที่ 3
+กรอบข้อมูล: ข้อมูลการเบิกจ่ายงบประมาณรายจ่ายประจำปี พ.ศ. 2565 – 2569 (รวม 5 ปี วงเงินรวม 220,200,000 บาท)
+
+1. ภาพรวมโครงสร้างงบประมาณ 5 ปี:
+• งบบุคลากร: 70.60 ล้านบาท (32.06%) | งบลงทุน: 54.70 ล้านบาท (24.84%) | งบกลาง: 48.90 ล้านบาท (22.21%) | งบดำเนินงาน: 37.00 ล้านบาท (16.80%) | งบเงินอุดหนุน: 9.00 ล้านบาท (4.09%)
+
+2. สาเหตุหลักที่ทำให้การเบิกจ่ายภาพรวมล่าช้า (Root Cause Analysis):
+• คอขวดในงบลงทุน (ค่าที่ดินและสิ่งก่อสร้าง 84.10% ของงบลงทุน): ล่าช้าในขั้นตอนจัดทำ TOR, e-GP และการตรวจรับงานงวดสุดท้ายในไตรมาส 4
+• การกระจุกตัวของกิจกรรมในงบดำเนินงานช่วงไตรมาส 3-4
+• กระบวนการอนุมัติเงินสำรองจ่าย (งบกลาง) ขาดการจัดลำดับความสำคัญล่วงหน้า
+
+3. ข้อเสนอแนะเชิงบริหาร 3 ข้อ เพื่อเร่งรัดการเบิกจ่ายในไตรมาสที่ 3:
+• ข้อที่ 1: จัดตั้งคณะทำงานเร่งรัดงบลงทุน "Fast-Track Procurement & Inspection Team" ติดตามงานก่อสร้างทุก 2 สัปดาห์
+• ข้อที่ 2: กำหนดเส้นตายการผูกพันงบดำเนินงานกลางไตรมาส 3 และใช้มาตรการโอนเกลี่ยงบประมาณ (Reallocation)
+• ข้อที่ 3: ปรับกลไกการอนุมัติ "งบกลาง (สำรองจ่าย)" เชิงรุกตั้งแต่ต้นไตรมาสที่ 3`
+                    }
+                ]
+            },
+            {
+                id: 'ws5',
+                code: 'Workshop 5',
+                shortTitle: 'ออกแบบ Workflow ด้วย AI',
+                title: 'Workshop 5 : การออกแบบกระบวนการทำงานและการวิเคราะห์ข้อมูลของ อปท. โดยมี AI เป็นผู้ช่วย',
+                icon: 'git-merge',
+                description: 'มุ่งเน้นการเปลี่ยนผ่านการทำงานระดับบุคคลสู่ระดับองค์กร ผู้เข้าอบรมจะได้เรียนรู้การนำข้อมูลงบประมาณ ข้อมูลคำร้องเรียน หรือข้อมูลการให้บริการมาให้ AI วิเคราะห์แนวโน้ม พร้อมทั้งวิเคราะห์ขั้นตอนการทำงานเดิมที่มีความล่าช้า (Bottleneck) แล้วออกแบบกระบวนการทำงานใหม่ที่มี AI เป็นผู้ช่วยในจุดที่เหมาะสม โดยยังคงให้เจ้าหน้าที่เป็นผู้ตรวจสอบความถูกต้องตามระเบียบกฎหมาย (Human-in-the-Loop)',
+                topics: [
+                    'การวิเคราะห์แนวโน้มของงาน อปท. และการออกแบบขั้นตอนการทำงานใหม่ (Workflow Redesign) เพื่อลดภาระงานซ้ำซ้อน',
+                    'การจัดทำแนวทางใช้ AI ในหน่วยงานอย่างเป็นระบบ',
+                    'การกำหนดบทบาทเจ้าหน้าที่ในการตรวจสอบและควบคุมคุณภาพงานที่ได้จาก AI (Human-in-the-Loop)',
+                    'ตัวอย่างแผนการนำ AI ไปใช้ในกอง/ฝ่ายต่างๆ ขององค์กรปกครองส่วนท้องถิ่น'
+                ],
+                structureTitle: 'โครงสร้าง Prompt สำหรับการออกแบบกระบวนการทำงาน (Workflow) และวิเคราะห์แนวโน้ม:',
+                structureItems: [
+                    { label: 'บทบาท', text: 'ผู้เชี่ยวชาญด้านการพัฒนาระบบราชการและการวิเคราะห์ข้อมูล' },
+                    { label: 'กระบวนการเดิม / สถิติย้อนหลัง', text: 'อธิบายขั้นตอนปัจจุบันที่ใช้เวลานาน หรือข้อมูลสถิติเรื่องร้องเรียนของหน่วยงาน' },
+                    { label: 'เป้าหมาย', text: 'ลดขั้นตอนซ้ำซ้อน, ระบุจุดที่นำ AI มาช่วยได้, และกำหนดจุดตรวจสอบโดยเจ้าหน้าที่ (Human-in-the-Loop)' },
+                    { label: 'รูปแบบผลลัพธ์', text: 'ตารางเปรียบเทียบขั้นตอนเดิม-ใหม่ และแนวทางควบคุมคุณภาพ (QC)' }
+                ],
+                prompts: [
+                    {
+                        title: 'ตัวอย่างที่ 1 (การออกแบบกระบวนการทำงานใหม่เพื่อลดภาระงานซ้ำซ้อน)',
+                        role: 'ผู้เชี่ยวชาญด้านการพัฒนาระบบราชการและการออกแบบ Workflow',
+                        task: 'ออกแบบ Workflow ใหม่โดยนำ AI เข้ามาเป็นผู้ช่วยในแต่ละขั้นตอน',
+                        context: 'ขั้นตอนการรับเรื่องราวร้องทุกข์เดิม 5 ขั้นตอน (1. เขียนคำร้อง 2. พิมพ์สรุป 3. ร่างบันทึกเสนอ 4. ส่งกองที่เกี่ยวข้อง 5. แจ้งประชาชน) ใช้เวลา 7 วันทำการ',
+                        format: 'ลดเวลาเหลือภายใน 2 วันทำการ พร้อมระบุจุดที่เจ้าหน้าที่ต้องตรวจสอบความถูกต้อง (Human-in-the-Loop)'
+                    },
+                    {
+                        title: 'ตัวอย่างที่ 2 (การวิเคราะห์แนวโน้มข้อมูลคำร้องเรียนเพื่อวางแผนเชิงรุก)',
+                        role: 'นักวิเคราะห์ข้อมูลและวางแผนงาน อปท.',
+                        task: 'วิเคราะห์แนวโน้มปัญหาและจัดทำแผนการปฏิบัติงานเชิงรุก (Proactive Plan) รายไตรมาสให้กับกองช่างและกองสาธารณสุขฯ',
+                        context: 'สถิติเรื่องร้องเรียนรอบ 6 เดือน: พ.ค.-ก.ค. เรื่องน้ำท่วม/ท่ออุดตัน 65 เรื่อง, ส.ค.-ต.ค. เรื่องกิ่งไม้/ไฟกิ่งดับ 48 เรื่อง, ขยะตกค้างเฉลี่ยเดือนละ 20 เรื่อง',
+                        format: 'แผนการปฏิบัติงานเชิงรุกแบ่งรายไตรมาส ชัดเจน นำไปปฏิบัติได้จริง'
+                    }
+                ],
+                outputs: [
+                    {
+                        title: 'ตัวอย่างผลลัพธ์ที่ได้จาก AI (ตารางออกแบบกระบวนการทำงานใหม่: งานรับเรื่องราวร้องทุกข์)',
+                        content: `ตารางออกแบบกระบวนการทำงานใหม่ (AI-Assisted Workflow): งานรับเรื่องราวร้องทุกข์
+
+1. การรับเรื่องและคัดแยก:
+   • รูปแบบเดิม: เจ้าหน้าที่อ่านและพิมพ์สรุปทีละฉบับ (ใช้เวลา 1-2 วัน)
+   • การใช้ AI ช่วย: ใช้ AI สกัดข้อมูลสำคัญจากคำร้องออนไลน์/ภาพถ่ายเอกสาร จัดหมวดหมู่ความเร่งด่วนและระบุกองที่รับผิดชอบอัตโนมัติ (ใช้เวลา 5 นาที)
+   • บทบาทเจ้าหน้าที่ (QC): ตรวจสอบความถูกต้องของพิกัดและประเภทเรื่องร้องเรียน
+
+2. การร่างบันทึกข้อความส่งต่อ:
+   • รูปแบบเดิม: พิมพ์บันทึกข้อความใหม่ทุกครั้ง (ใช้เวลา 1-2 วัน)
+   • การใช้ AI ช่วย: ใช้ Prompt มาตรฐานให้ AI ร่างบันทึกข้อความเสนอผู้บริหารและหนังสือแจ้งกองที่เกี่ยวข้องทันที (ใช้เวลา 10 นาที)
+   • บทบาทเจ้าหน้าที่ (QC): ตรวจทานเลขที่หนังสือ ระเบียบอ้างอิง และเสนอลงนาม`
+                    }
+                ]
+            },
+            {
+                id: 'ethics',
+                code: 'บรรยายพิเศษ',
+                shortTitle: 'จริยธรรม AI & กฎหมาย PDPA',
+                title: 'บรรยายพิเศษ : “การใช้ AI อย่างปลอดภัย มีจริยธรรม และสอดคล้องกับงานราชการ”',
+                icon: 'shield-check',
+                description: 'สร้างความตระหนักรู้เรื่องความปลอดภัยทางไซเบอร์และกฎหมายที่เกี่ยวข้องกับการปฏิบัติราชการ เจ้าหน้าที่ อปท. ต้องเข้าใจว่าข้อมูลใดห้ามป้อนเข้าสู่ระบบ AI สาธารณะโดยเด็ดขาด (เช่น เลขประจำตัวประชาชน 13 หลัก, ข้อมูลผู้เสียภาษีรายบุคคล, เอกสารชั้นความลับ) เทคนิคการทำ Data Anonymization (การปกปิดข้อมูลระบุตัวตนก่อนสั่ง AI) รวมถึงวิธีตรวจสอบเมื่อ AI อ้างอิงเลขมาตราหรือระเบียบกฎหมายที่ไม่มีอยู่จริง (AI Hallucination)',
+                topics: [
+                    'ข้อควรระวังในการนำข้อมูลราชการและเอกสารชั้นความลับเข้าสู่ระบบ AI สาธารณะ',
+                    'การตรวจสอบความถูกต้องของข้อมูลก่อนนำไปใช้ (Fact-Checking) และข้อความแสดงการอ้างอิง (Disclaimer)',
+                    'การคุ้มครองข้อมูลส่วนบุคคล (PDPA) และความเสี่ยงจากข้อมูลที่ AI สร้างขึ้นเอง (Hallucination)',
+                    'แนวทางการจัดทำประกาศหรือข้อตกลงการใช้ AI ภายในหน่วยงาน (Internal AI Policy)'
+                ],
+                structureTitle: 'โครงสร้าง Prompt สำหรับการคัดกรองข้อมูลส่วนบุคคล (PDPA) และตรวจสอบความถูกต้อง:',
+                structureItems: [
+                    { label: 'คำสั่ง', text: 'ตรวจสอบข้อมูลส่วนบุคคล / ตรวจสอบความสมเหตุสมผลและข้อควรระวังทางกฎหมาย' },
+                    { label: 'เงื่อนไขความปลอดภัย', text: 'แทนที่ชื่อ-นามสกุล เลขบัตรประชาชน ที่อยู่ เบอร์โทรศัพท์ ด้วยสัญลักษณ์ [ปกปิดข้อมูล] ก่อนประมวลผล' },
+                    { label: 'ผลลัพธ์', text: 'รายงานจุดเสี่ยงด้าน PDPA และรายการ Checklist จุดที่ต้องตรวจสอบกับระเบียบฉบับจริง' }
+                ],
+                prompts: [
+                    {
+                        title: 'ตัวอย่างที่ 1 (สร้าง Slide/Infographic สำหรับบรรยายพิเศษ: การใช้ AI อย่างปลอดภัยและสอดคล้องกับงาน อปท.)',
+                        role: 'วิทยากรผู้เชี่ยวชาญด้านเทคโนโลยีดิจิทัล พ.ร.บ.คอมพิวเตอร์ การคุ้มครองข้อมูลส่วนบุคคล (PDPA) และจริยธรรม AI ภาครัฐ',
+                        task: 'ออกแบบและเขียนเนื้อหาสำหรับทำสไลด์บรรยายพิเศษ (Presentation Slides) และแผ่นสรุปความรู้ (Infographic) เรื่อง การใช้ AI อย่างปลอดภัย มีจริยธรรม และสอดคล้องกับงานราชการ/อปท.',
+                        context: 'ครอบคลุม 5 ประเด็นบังคับ: 1) ข้อความ Disclaimer ตามหลักราชการ 2) ระดับชั้นความลับของข้อมูลที่ห้ามใส่ใน AI ฟรี 3) ตัวอย่าง Good Prompt vs Bad Prompt สำหรับงาน อปท. 5 ตัวอย่าง 4) โครงร่างประกาศ Internal AI Policy 5) ปัญหา AI Hallucination',
+                        format: 'แบ่งเนื้อหาเป็น 10-12 สไลด์ สรุปปิดท้ายด้วย Infographic 1 หน้า (3 Dos & 3 Don\'ts) พร้อมโครงสร้าง HTML สำหรับนำไป Import เข้า Gamma.app หรือ Canva',
+                        link: 'https://share.gemini.google/QuLC60r8jzna'
+                    },
+                    {
+                        title: 'ตัวอย่างที่ 2 (การตรวจสอบและปกปิดข้อมูลส่วนบุคคลตามหลัก PDPA ก่อนนำไปเผยแพร่)',
+                        role: 'เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล (DPO) / ตรวจสอบความปลอดภัยข้อมูล',
+                        task: 'ตรวจสอบจุดเสี่ยงที่อาจละเมิด พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA) และปรับแก้ข้อความโดยปกปิดข้อมูลที่อ่อนไหว',
+                        context: 'ร่างประกาศรายชื่อผู้มีสิทธิ์ได้รับความช่วยเหลือด้านสวัสดิการ [วางข้อความตัวอย่างที่จำลองขึ้น]',
+                        format: 'ระบุจุดเสี่ยง ห้ามเผยแพร่ข้อมูลอ่อนไหวโดยตรง และปรับข้อความให้เหมาะสมกับการประกาศบนเว็บไซต์ อปท.',
+                        link: 'https://share.gemini.google/TMSVyJAUf8Zo'
+                    },
+                    {
+                        title: 'ตัวอย่างที่ 3 (การสั่งให้ AI ระบุจุดที่เจ้าหน้าที่ต้องตรวจสอบข้อกฎหมายซ้ำเพื่อป้องกัน Hallucination)',
+                        role: 'ผู้ตรวจสอบความถูกต้องทางกฎหมายและระเบียบราชการ',
+                        task: 'ระบุข้อระเบียบ กฎหมาย หรือหนังสือเวียนที่ต้องตรวจสอบความถูกต้องกับต้นฉบับจริงอีกครั้งก่อนเสนอลงนาม',
+                        context: 'ร่างบันทึกข้อความหารือแนวทางปฏิบัติเรื่องการจัดซื้อจัดจ้างที่สร้างขึ้นจาก AI',
+                        format: 'รายการ Checklist จุดที่ต้องนำไปตรวจสอบกับฉบับจริงของกรมบัญชีกลางและกรมส่งเสริมการปกครองท้องถิ่น'
+                    }
+                ],
+                outputs: [
+                    {
+                        title: 'ตัวอย่างผลลัพธ์ที่ได้จาก AI (ผลการตรวจสอบความเสี่ยงด้าน PDPA และข้อกฎหมาย)',
+                        content: `ผลการตรวจสอบความเสี่ยงด้าน PDPA และข้อกฎหมาย:
+
+1. จุดเสี่ยงด้านข้อมูลส่วนบุคคล (PDPA):
+   • พบการระบุ "เลขประจำตัวประชาชน 13 หลักเต็ม" "เบอร์โทรศัพท์ส่วนตัว" และ "ข้อมูลอาการเจ็บป่วย" ซึ่งถือเป็นข้อมูลส่วนบุคคลและข้อมูลอ่อนไหว (Sensitive Data)
+   • แนวทางแก้ไข: ตัดคอลัมน์เบอร์โทรศัพท์และอาการเจ็บป่วยออกจากการประกาศสาธารณะ และปรับการแสดงเลขบัตรประชาชนเป็นรูปแบบปิดบังบางส่วน เช่น 1-xxxx-xxxxx-12-3
+
+2. จุดที่เจ้าหน้าที่ต้องตรวจสอบกับเอกสารต้นฉบับ (Fact-Checking):
+   • [ ] ตรวจสอบเลขข้อของ ระเบียบกระทรวงมหาดไทยว่าด้วยการรับเงิน การเบิกจ่ายเงินฯ ให้ตรงกับฉบับแก้ไขเพิ่มเติมล่าสุด
+   • [ ] ตรวจสอบวงเงินและเงื่อนไขตาม พ.ร.บ. การจัดซื้อจัดจ้างและการบริหารพัสดุภาครัฐ พ.ศ. 2560 จากเอกสารราชการโดยตรงก่อนอ้างอิงในหนังสือ`
+                    }
+                ]
+            },
+            {
+                id: 'actionplan',
+                code: 'สรุป & Action Plan',
+                shortTitle: 'โจทย์จำลอง & แผนปฏิบัติการ',
+                title: 'ช่วงสรุปผลการอบรมและจัดทำแผนการนำ AI ไปใช้จริงในหน่วยงาน',
+                icon: 'rocket',
+                description: 'ขั้นตอนสุดท้ายเพื่อให้เกิดผลสัมฤทธิ์ในการนำไปใช้งานจริง ผู้เข้าอบรมแต่ละกอง/ฝ่ายจะได้รับโจทย์จำลองสถานการณ์จริงของ อปท. (เช่น การจัดงานประเพณีท้องถิ่น, การรับมือเหตุอุทกภัย, หรือการเร่งรัดจัดเก็บภาษี) โดยต้องใช้ AI ช่วยตั้งแต่การวิเคราะห์ข้อมูล ร่างโครงการ ร่างหนังสือราชการ ทำสื่อประชาสัมพันธ์ ไปจนถึงการตรวจสอบความถูกต้องตามหลักจริยธรรม และจัดทำแผนปฏิบัติการ (Action Plan) เพื่อนำกลับไปใช้ในหน่วยงานของตนทันทีหลังจบการอบรม',
+                topics: [
+                    'โจทย์จำลองงานจริงตั้งแต่ต้นจนจบ (End-to-End Case Study), ทบทวนองค์ความรู้ และทำแบบทดสอบหลังเรียน (Post-test)',
+                    'ผู้เข้าอบรมจัดทำแนวทางการนำ AI ไปประยุกต์ใช้กับงานของตนเอง (Action Plan ระยะ 30-60-90 วัน)',
+                    'แลกเปลี่ยนความคิดเห็น ตอบข้อซักถาม สรุปองค์ความรู้สำคัญ และประเมินผลการอบรม'
+                ],
+                structureTitle: 'โครงสร้าง Prompt สำหรับการจัดทำแผนปฏิบัติการ (Action Plan) รายบุคคล/รายกอง:',
+                structureItems: [
+                    { label: 'บทบาทและสังกัดของผู้เข้าอบรม', text: 'เช่น นักวิชาการจัดเก็บรายได้ กองคลัง / นักพัฒนาชุมชนชำนาญการ' },
+                    { label: 'ภารกิจงานประจำ', text: 'ระบุงานประจำที่ทำบ่อยและใช้เวลานาน 3 อันดับแรก' },
+                    { label: 'คำสั่ง', text: 'ช่วยออกแบบแผนการนำ AI ไปประยุกต์ใช้จริงในระยะ 30-60-90 วัน' },
+                    { label: 'รูปแบบผลลัพธ์', text: 'ตาราง Action Plan ที่ระบุ งานที่ทำ, เครื่องมือ/Prompt ที่ใช้, ตัวชี้วัดการลดเวลาทำงาน (KPI), และผู้ตรวจสอบคุณภาพ (QC)' }
+                ],
+                prompts: [
+                    {
+                        title: 'ตัวอย่างที่ 1 (การจัดทำ Action Plan การนำ AI ไปใช้จริงในกอง/ฝ่ายของตนเอง)',
+                        role: 'นักพัฒนาชุมชนชำนาญการ',
+                        task: 'ร่างตาราง Action Plan การนำ AI ไปใช้ในงานทั้ง 3 ด้านในระยะ 30 วันแรก พร้อมกำหนดตัวชี้วัด (KPI)',
+                        context: 'งานหลักที่ใช้เวลานาน: 1) เขียนโครงการสนับสนุนกลุ่มอาชีพ 2) สรุปรายงานผลเยี่ยมบ้านผู้สูงอายุ/ผู้พิการ 3) ทำสื่อแจ้งสิทธิ์สวัสดิการ',
+                        format: 'ตาราง Action Plan ระยะ 30 วัน ระบุตัวชี้วัด เช่น เปอร์เซ็นต์การลดเวลาทำงาน และขั้นตอนการตรวจทานข้อมูล',
+                        link: 'https://share.gemini.google/IzYn4va2OduU'
+                    },
+                    {
+                        title: 'ตัวอย่างที่ 2 (การทำโจทย์จำลองงานจริงตั้งแต่ต้นจนจบ - End-to-End Case Study)',
+                        role: 'คณะทำงานจัดงานประเพณีท้องถิ่นของ อปท.',
+                        task: 'ดำเนินการแบบครบวงจร: 1) ร่างโครงร่างโครงการ 2) ร่างหนังสือเชิญประธาน 3) ร่างโพสต์ Facebook 4) ระบุ Checklist ข้อควรระวัง',
+                        context: 'งาน "ประเพณีลอยกระทงปลอดเหล้าและเป็นมิตรต่อสิ่งแวดล้อม ประจำปี 2569" เชิญนายอำเภอเป็นประธานพิธีเปิด',
+                        format: 'จัดทำทุกส่วนประกอบอย่างสมบูรณ์ ถูกต้องตามระเบียบสารบรรณ และเหมาะกับการสื่อสารแต่ละช่องทาง',
+                        link: 'https://share.gemini.google/iIyOx9YyXDDU'
+                    }
+                ],
+                outputs: [
+                    {
+                        title: 'ตัวอย่างผลลัพธ์ที่ได้จาก AI (แผนการนำ AI ไปใช้จริงของนักพัฒนาชุมชน ระยะ 30 วัน)',
+                        content: `แผนปฏิบัติการ (Action Plan) การประยุกต์ใช้ AI ในงานพัฒนาชุมชน (ระยะ 30 วัน)
+
+1. งานเขียนโครงการส่งเสริมกลุ่มอาชีพ:
+   • แนวทางใช้ AI: สร้างคลัง Prompt มาตรฐานสำหรับร่างหลักการและเหตุผล และวิเคราะห์ความคุ้มค่าของโครงการ
+   • การควบคุมคุณภาพ (QC): เจ้าหน้าที่ตรวจสอบความสอดคล้องกับระเบียบ มท. ว่าด้วยค่าใช้จ่ายในการฝึกอบรมฯ
+   • ผลลัพธ์ที่คาดหวัง (KPI): ลดเวลาการร่างโครงการจาก 2 วัน เหลือ 2 ชั่วโมง (ลดเวลาลง 75%)
+
+2. งานสรุปรายงานผลการลงพื้นที่เยี่ยมบ้าน:
+   • แนวทางใช้ AI: นำบันทึกย่อจากการลงพื้นที่ (โดยปกปิดชื่อ-เลขบัตรประชาชนตามหลัก PDPA) ให้ AI สรุปเป็นรายงานประจำเดือนและจัดหมวดหมู่ความช่วยเหลือ
+   • การควบคุมคุณภาพ (QC): นักพัฒนาชุมชนตรวจสอบความถูกต้องของข้อเท็จจริงก่อนนำชื่อจริงใส่ในเอกสารราชการ
+   • ผลลัพธ์ที่คาดหวัง (KPI): จัดทำรายงานสรุปเสนอผู้บริหารได้ภายในวันเดียวหลังลงพื้นที่เสร็จสิ้น
+
+3. งานประชาสัมพันธ์แจ้งสิทธิ์สวัสดิการ:
+   • แนวทางใช้ AI: ใช้ AI ย่อยระเบียบเบี้ยยังชีพ/เงินอุดหนุนเด็กแรกเกิด ให้เป็นข้อความสั้นๆ สำหรับโพสต์ LINE หมู่บ้านและออกแบบ Infographic
+   • การควบคุมคุณภาพ (QC): ตรวจทานเงื่อนไขคุณสมบัติและวันที่รับลงทะเบียนให้ถูกต้อง 100%
+   • ผลลัพธ์ที่คาดหวัง (KPI): ประชาชนเข้าใจขั้นตอนชัดเจนขึ้น ลดการเดินทางมาติดต่อซ้ำซ้อนเนื่องจากเอกสารไม่ครบ`
+                    }
+                ]
+            }
+        ];
+
+        // ==========================================
+        // 2. QUIZ QUESTIONS DATA (POST-TEST)
+        // ==========================================
+        const quizQuestions = [
+            {
+                q: '1. โครงสร้างการเขียนคำสั่ง (Prompt) มาตรฐาน 4 องค์ประกอบสำหรับงานราชการ ประกอบด้วยอะไรบ้าง?',
+                options: [
+                    'ก. ชื่อเรื่อง + วันที่ + ชื่อผู้รับ + คำลงท้าย',
+                    'ข. บทบาท (Role) + งานที่ต้องการให้ทำ (Task) + บริบทและข้อมูลสำคัญ (Context) + รูปแบบภาษาและผลลัพธ์ (Format)',
+                    'ค. คำนำ + เนื้อเรื่อง + สรุป + เอกสารอ้างอิง',
+                    'ง. ชื่อโปรแกรม AI + ความยาวของเอกสาร + ขนาดตัวอักษร + ลายมือชื่อ'
+                ],
+                correct: 1,
+                explanation: 'การกำหนด บทบาท + งาน + บริบท + รูปแบบผลลัพธ์ ช่วยให้ AI เข้าใจระดับภาษาทางการและโครงสร้างตามระเบียบงานสารบรรณได้อย่างแม่นยำที่สุด'
+            },
+            {
+                q: '2. ตามระเบียบสำนักนายกรัฐมนตรีว่าด้วยงานสารบรรณ พ.ศ. 2526 "บันทึกข้อความ" ที่ใช้ติดต่อภายใน อปท. จัดเป็นหนังสือราชการประเภทใด?',
+                options: [
+                    'ก. ประเภทที่ 1 หนังสือภายนอก',
+                    'ข. ประเภทที่ 2 หนังสือภายใน',
+                    'ค. ประเภทที่ 3 หนังสือประทับตรา',
+                    'ง. ประเภทที่ 4 หนังสือสั่งการ'
+                ],
+                correct: 1,
+                explanation: 'หนังสือภายใน คือ หนังสือติดต่อราชการที่เป็นแบบพิธีน้อยกว่าหนังสือภายนอก ใช้กระดาษบันทึกข้อความ (ครุฑสูง 1.5 ซม.) สำหรับติดต่อภายในหน่วยงานหรือจังหวัดเดียวกัน'
+            },
+            {
+                q: '3. ข้อใดคือการปฏิบัติที่ "ถูกต้อง" ตามหลักการคุ้มครองข้อมูลส่วนบุคคล (PDPA) เมื่อนำ AI สาธารณะมาช่วยทำงานของ อปท.?',
+                options: [
+                    'ก. อัปโหลดไฟล์รายชื่อผู้ป่วยติดเตียงพร้อมเลขบัตรประชาชน 13 หลักให้ AI จัดหมวดหมู่',
+                    'ข. นำเอกสารลับมากของทางราชการไปให้ AI สรุปย่อเพื่อความรวดเร็ว',
+                    'ค. ปกปิดชื่อ-นามสกุล เลขบัตรประชาชน และเบอร์โทรศัพท์ โดยแทนที่ด้วยสัญลักษณ์ [ปกปิดข้อมูล] ก่อนป้อนเข้าสู่ระบบ AI',
+                    'ง. โพสต์ประกาศรายชื่อผู้ค้างชำระภาษีพร้อมเบอร์โทรศัพท์ส่วนตัวขึ้นเพจ Facebook ทันทีที่ AI ร่างเสร็จ'
+                ],
+                correct: 2,
+                explanation: 'การทำ Data Anonymization (ปกปิดข้อมูลระบุตัวตนและข้อมูลอ่อนไหว) ก่อนป้อนเข้าสู่ AI สาธารณะ เป็นหลักปฏิบัติสำคัญเพื่อไม่ให้ละเมิด PDPA'
+            },
+            {
+                q: '4. ภาวะ "AI Hallucination" ในบริบทงานราชการหมายถึงข้อใด และเจ้าหน้าที่ควรรับมืออย่างไร?',
+                options: [
+                    'ก. AI ทำงานช้าลงเมื่อมีผู้ใช้งานพร้อมกันจำนวนมาก',
+                    'ข. AI แต่งข้อมูลเท็จหรืออ้างอิงเลขมาตรา/ระเบียบกระทรวงมหาดไทยที่ไม่มีอยู่จริง จึงต้องมีเจ้าหน้าที่ตรวจสอบกับต้นฉบับจริงเสมอ (Human-in-the-Loop)',
+                    'ค. AI ปฏิเสธการเขียนคำกล่าวเปิดงานให้กับผู้บริหาร',
+                    'ง. AI สร้างภาพอินโฟกราฟิกที่มีสีสันสดใสเกินไป'
+                ],
+                correct: 1,
+                explanation: 'Generative AI อาจสร้างข้อความที่ดูน่าเชื่อถือแต่อ้างอิงข้อกฎหมายที่คลาดเคลื่อน เจ้าหน้าที่ผู้รับผิดชอบจึงต้องตรวจสอบ (Fact-Checking) กับระเบียบฉบับจริงก่อนเสนอลงนามทุกครั้ง'
+            },
+            {
+                q: '5. ในการออกแบบกระบวนการทำงานใหม่ (Workflow Redesign) โดยมี AI เป็นผู้ช่วย แนวคิด "Human-in-the-Loop" มีความสำคัญอย่างไร?',
+                options: [
+                    'ก. ให้ AI ตัดสินใจอนุมัติงบประมาณแทนผู้บริหารทั้งหมด',
+                    'ข. ให้เจ้าหน้าที่ทำหน้าที่ตรวจสอบ คัดกรอง และควบคุมคุณภาพความถูกต้องของงานที่ได้จาก AI ก่อนนำไปใช้ในราชการ',
+                    'ค. ให้ประชาชนเป็นผู้เขียนบันทึกข้อความราชการด้วยตนเอง',
+                    'ง. ยกเลิกการตรวจสอบเอกสารตามระเบียบพัสดุเพื่อความรวดเร็ว'
+                ],
+                correct: 1,
+                explanation: 'AI เป็นเพียงผู้ช่วยลดเวลาการร่างและสกัดข้อมูล แต่ความรับผิดชอบทางกฎหมายและความถูกต้องตามระเบียบยังคงเป็นของเจ้าหน้าที่ผู้ปฏิบัติงาน (Human-in-the-Loop)'
+            }
+        ];
+
+        // ==========================================
+        // 3. STATE MANAGEMENT
+        // ==========================================
+        let currentModuleIndex = 0;
+        let currentWorkshopTab = 'overview';
+        let completedModules = new Set(['ws1']);
+        let isPresentationMode = false;
+        let userQuizAnswers = {};
+
+        // ==========================================
+        // 4. CORE RENDER FUNCTIONS
+        // ==========================================
+        function initApp() {
+            renderSidebar();
+            renderCurrentModule();
+            renderQuiz();
+            fillBuilderSample();
+            updateProgressUI();
+            lucide.createIcons();
+        }
+
+        function renderSidebar(filterText = '') {
+            const navList = document.getElementById('module-nav-list');
+            navList.innerHTML = '';
+
+            const normalizedFilter = filterText.trim().toLowerCase();
+
+            workshopsData.forEach((mod, idx) => {
+                // Check search filter across title, topics, and prompts
+                const matchTitle = mod.title.toLowerCase().includes(normalizedFilter);
+                const matchTopics = mod.topics.some(t => t.toLowerCase().includes(normalizedFilter));
+                const matchPrompts = mod.prompts.some(p => 
+                    p.title.toLowerCase().includes(normalizedFilter) ||
+                    p.task.toLowerCase().includes(normalizedFilter) ||
+                    p.context.toLowerCase().includes(normalizedFilter)
+                );
+
+                if (normalizedFilter && !matchTitle && !matchTopics && !matchPrompts) {
+                    return;
+                }
+
+                const isActive = idx === currentModuleIndex;
+                const isDone = completedModules.has(mod.id);
+
+                const btn = document.createElement('button');
+                btn.onclick = () => {
+                    switchMainView('workshop');
+                    selectModule(idx);
+                    if (window.innerWidth < 1024) toggleMobileSidebar();
+                };
+                btn.className = `w-full text-left p-3 rounded-xl transition flex items-start gap-3 group ${
+                    isActive 
+                        ? 'bg-gov-800 text-white shadow-sm' 
+                        : 'hover:bg-slate-100 text-slate-700'
+                }`;
+
+                btn.innerHTML = `
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${
+                        isActive ? 'bg-amber-400 text-slate-950' : isDone ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600 group-hover:bg-white'
+                    }">
+                        <i data-lucide="${isDone && !isActive ? 'check' : mod.icon}" class="w-4 h-4"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between gap-1">
+                            <span class="text-[11px] font-heading font-semibold uppercase tracking-wide ${
+                                isActive ? 'text-amber-300' : 'text-slate-400'
+                            }">${mod.code}</span>
+                            <span class="text-[11px] px-1.5 py-0.2 rounded ${
+                                isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'
+                            }">${mod.prompts.length} Prompt</span>
+                        </div>
+                        <p class="font-heading font-semibold text-sm truncate mt-0.5">${mod.shortTitle}</p>
+                    </div>
+                `;
+                navList.appendChild(btn);
+            });
+
+            lucide.createIcons();
+        }
+
+        function selectModule(index) {
+            currentModuleIndex = index;
+            renderSidebar(document.getElementById('search-input').value);
+            renderCurrentModule();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function navigateModule(direction) {
+            const nextIdx = currentModuleIndex + direction;
+            if (nextIdx >= 0 && nextIdx < workshopsData.length) {
+                selectModule(nextIdx);
+            }
+        }
+
+        function renderCurrentModule() {
+            const mod = workshopsData[currentModuleIndex];
+
+            // Header Banner
+            document.getElementById('module-badge').textContent = mod.code;
+            document.getElementById('module-title').textContent = mod.title;
+            document.getElementById('module-description').textContent = mod.description;
+
+            // Complete Button status
+            const completeBtn = document.getElementById('btn-complete-module');
+            if (completedModules.has(mod.id)) {
+                completeBtn.innerHTML = `<i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-300"></i><span>เรียนจบหัวข้อนี้แล้ว</span>`;
+                completeBtn.className = "flex items-center gap-1.5 text-xs font-heading px-3 py-1.5 rounded-lg bg-emerald-500/30 border border-emerald-400/40 text-white backdrop-blur-xs transition";
+            } else {
+                completeBtn.innerHTML = `<i data-lucide="square" class="w-4 h-4"></i><span>ทำเครื่องหมายว่าเรียนจบหัวข้อนี้</span>`;
+                completeBtn.className = "flex items-center gap-1.5 text-xs font-heading px-3 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white backdrop-blur-xs transition";
+            }
+
+            // Badge count on tab
+            document.getElementById('prompt-count-badge').textContent = mod.prompts.length;
+
+            // 1. Topics List
+            const topicsList = document.getElementById('module-topics-list');
+            topicsList.innerHTML = mod.topics.map(t => `
+                <li class="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-100 text-slate-700 text-sm">
+                    <i data-lucide="check-circle" class="w-4 h-4 text-blue-600 shrink-0 mt-0.5"></i>
+                    <span>${t}</span>
+                </li>
+            `).join('');
+
+            // 2. Special 6 Types of Gov Docs (Only Workshop 1)
+            const govDocsSection = document.getElementById('special-gov-docs-section');
+            if (mod.hasGovDocsSection && mod.govDocTypes) {
+                govDocsSection.classList.remove('hidden');
+                const grid = document.getElementById('gov-doc-types-grid');
+                grid.innerHTML = mod.govDocTypes.map(doc => `
+                    <div onclick="jumpToPrompt(${doc.promptIndex})" class="cursor-pointer group p-4 rounded-xl border border-slate-200 hover:border-blue-500 bg-slate-50/70 hover:bg-blue-50/40 transition flex flex-col justify-between space-y-3">
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <span class="font-heading font-bold text-sm text-gov-800 group-hover:text-blue-700">${doc.num}</span>
+                                <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition"></i>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed">${doc.desc}</p>
+                        </div>
+                        <div class="pt-2 border-t border-slate-200/70 flex items-center gap-1.5 text-[11px] text-amber-800 font-medium">
+                            <i data-lucide="file-badge" class="w-3.5 h-3.5 text-amber-600 shrink-0"></i>
+                            <span class="truncate">${doc.paper}</span>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                govDocsSection.classList.add('hidden');
+            }
+
+            // 3. 1x1 Prompt Structure Table
+            document.getElementById('structure-table-header').textContent = mod.structureTitle;
+            const structBody = document.getElementById('structure-table-body');
+            structBody.innerHTML = mod.structureItems.map((item, i) => `
+                <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                    <span class="font-heading font-bold text-indigo-950 shrink-0">• ${item.label}:</span>
+                    <span class="text-slate-700">${item.text}</span>
+                </div>
+            `).join('');
+
+            // 4. 1x1 Prompt Examples Table
+            const promptsContainer = document.getElementById('prompts-list-container');
+            promptsContainer.innerHTML = mod.prompts.map((p, idx) => {
+                const fullPromptText = `บทบาท: ${p.role}\nงานที่ต้องการให้ทำ: ${p.task}\nบริบทและข้อมูลสำคัญ: ${p.context}\nรูปแบบภาษาและผลลัพธ์: ${p.format}`;
+                const encodedPrompt = encodeURIComponent(fullPromptText);
+
+                return `
+                <div id="prompt-card-${idx}" class="border-2 border-slate-200 hover:border-blue-300 rounded-xl overflow-hidden bg-white shadow-2xs transition">
+                    <!-- 1x1 Table Header -->
+                    <div class="bg-slate-800 text-white px-4 py-3 flex flex-wrap items-center justify-between gap-2">
+                        <span class="font-heading font-semibold text-sm text-amber-300">${p.title}</span>
+                        <div class="flex items-center gap-2">
+                            ${p.link ? `
+                                <a href="${p.link}" target="_blank" rel="noopener noreferrer" class="text-xs bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded-lg flex items-center gap-1 transition">
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5 text-amber-300"></i>
+                                    <span>ดูตัวอย่างจริงบน Gemini</span>
+                                </a>
+                            ` : ''}
+                            <button onclick="loadIntoBuilder(${idx})" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded-lg flex items-center gap-1 transition">
+                                <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
+                                <span>ปรับแต่งในเครื่องมือสร้าง</span>
+                            </button>
+                            <button onclick="copyTextDecode('${encodedPrompt}')" class="text-xs bg-amber-500 hover:bg-amber-400 text-slate-950 font-heading font-semibold px-3 py-1 rounded-lg flex items-center gap-1 transition shadow-xs">
+                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                <span>คัดลอก Prompt</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- 1x1 Table Single Cell Content -->
+                    <div class="p-5 space-y-2.5 text-slate-800 bg-slate-50/50 prompt-box">
+                        <div><strong class="font-heading text-blue-900">บทบาท:</strong> ${p.role}</div>
+                        <div><strong class="font-heading text-blue-900">งานที่ต้องการให้ทำ:</strong> ${p.task}</div>
+                        <div><strong class="font-heading text-blue-900">บริบทและข้อมูลสำคัญ:</strong> ${p.context}</div>
+                        <div><strong class="font-heading text-blue-900">รูปแบบภาษาและผลลัพธ์:</strong> ${p.format}</div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            // 5. 1x1 AI Outputs Table
+            const outputsContainer = document.getElementById('outputs-list-container');
+            outputsContainer.innerHTML = mod.outputs.map((out, idx) => {
+                const encodedOut = encodeURIComponent(out.content);
+                return `
+                <div class="border-2 border-emerald-200 rounded-xl overflow-hidden bg-white shadow-2xs">
+                    <div class="bg-emerald-900 text-white px-4 py-3 flex items-center justify-between gap-2">
+                        <span class="font-heading font-semibold text-sm flex items-center gap-2">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-emerald-300"></i>
+                            <span>${out.title}</span>
+                        </span>
+                        <button onclick="copyTextDecode('${encodedOut}', 'คัดลอกผลลัพธ์ตัวอย่างเรียบร้อยแล้ว!')" class="text-xs bg-white/15 hover:bg-white/25 text-white font-heading px-3 py-1 rounded-lg flex items-center gap-1 transition">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                            <span>คัดลอกผลลัพธ์</span>
+                        </button>
+                    </div>
+                    <div class="p-5 bg-emerald-50/20 text-slate-800 whitespace-pre-line leading-relaxed text-sm sm:text-base font-sans prompt-box">${out.content}</div>
+                </div>
+                `;
+            }).join('');
+
+            // Pagination Buttons state
+            document.getElementById('btn-prev-module').disabled = currentModuleIndex === 0;
+            document.getElementById('btn-next-module').disabled = currentModuleIndex === workshopsData.length - 1;
+
+            lucide.createIcons();
+        }
+
+        // ==========================================
+        // 5. NAVIGATION & TABS LOGIC
+        // ==========================================
+        function switchWorkshopTab(tabName) {
+            currentWorkshopTab = tabName;
+            const tabs = ['overview', 'prompts', 'outputs'];
+            tabs.forEach(t => {
+                const contentEl = document.getElementById(`content-${t}`);
+                const btnEl = document.getElementById(`tab-${t}`);
+                if (t === tabName) {
+                    contentEl.classList.remove('hidden');
+                    btnEl.className = "workshop-tab-btn flex items-center gap-2 px-4 py-2.5 font-heading font-medium text-sm rounded-t-xl border-b-2 border-blue-600 text-blue-700 bg-blue-50/60 whitespace-nowrap";
+                } else {
+                    contentEl.classList.add('hidden');
+                    btnEl.className = "workshop-tab-btn flex items-center gap-2 px-4 py-2.5 font-heading font-medium text-sm rounded-t-xl border-b-2 border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100 whitespace-nowrap";
+                }
+            });
+            lucide.createIcons();
+        }
+
+        function jumpToPrompt(promptIndex) {
+            switchWorkshopTab('prompts');
+            setTimeout(() => {
+                const card = document.getElementById(`prompt-card-${promptIndex}`);
+                if (card) {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    card.classList.add('ring-4', 'ring-amber-400');
+                    setTimeout(() => card.classList.remove('ring-4', 'ring-amber-400'), 2200);
+                }
+            }, 100);
+        }
+
+        function switchMainView(viewName) {
+            const views = ['workshop', 'builder', 'quiz'];
+            views.forEach(v => {
+                const el = document.getElementById(`view-${v}`);
+                if (v === viewName) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            lucide.createIcons();
+        }
+
+        function toggleMobileSidebar() {
+            const sb = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const isHidden = sb.classList.contains('-translate-x-full');
+            if (isHidden) {
+                sb.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sb.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        function togglePresentationMode() {
+            isPresentationMode = !isPresentationMode;
+            const sb = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const btn = document.getElementById('presentation-btn');
+
+            if (isPresentationMode) {
+                sb.classList.add('lg:hidden');
+                mainContent.classList.add('presentation-zoom');
+                btn.classList.replace('bg-slate-800', 'bg-amber-500');
+                btn.classList.replace('text-slate-300', 'text-slate-950');
+                showToast('เปิดโหมดบรรยายสำหรับวิทยากร (ขยายตัวอักษร)');
+            } else {
+                sb.classList.remove('lg:hidden');
+                mainContent.classList.remove('presentation-zoom');
+                btn.classList.replace('bg-amber-500', 'bg-slate-800');
+                btn.classList.replace('text-slate-950', 'text-slate-300');
+                showToast('ปิดโหมดบรรยาย');
+            }
+        }
+
+        function handleSearch(val) {
+            renderSidebar(val);
+        }
+
+        function markModuleComplete() {
+            const mod = workshopsData[currentModuleIndex];
+            if (completedModules.has(mod.id)) {
+                completedModules.delete(mod.id);
+            } else {
+                completedModules.add(mod.id);
+                showToast(`บันทึกความคืบหน้า: เรียนจบ ${mod.code} แล้ว!`);
+            }
+            updateProgressUI();
+            renderSidebar(document.getElementById('search-input').value);
+            renderCurrentModule();
+        }
+
+        function updateProgressUI() {
+            const total = workshopsData.length;
+            const done = completedModules.size;
+            const pct = Math.round((done / total) * 100);
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+            document.getElementById('progress-text').textContent = `${done}/${total}`;
+        }
+
+        // ==========================================
+        // 6. INTERACTIVE PROMPT BUILDER LOGIC
+        // ==========================================
+        function setBuilderField(id, value) {
+            document.getElementById(id).value = value;
+            updateLivePrompt();
+        }
+
+        function fillBuilderSample() {
+            document.getElementById('builder-role').value = 'นักจัดการงานทั่วไปชำนาญการ สังกัดสำนักปลัด เทศบาลตำบลเมืองใหม่';
+            document.getElementById('builder-task').value = 'ร่างหนังสือภายใน (บันทึกข้อความ) เสนอต่อนายกเทศมนตรีตำบลเมืองใหม่';
+            document.getElementById('builder-context').value = 'เรื่อง ขออนุมัติจัดโครงการฝึกอบรมการใช้ AI ในงานราชการ ประจำปีงบประมาณ พ.ศ. 2569 ในวันศุกร์ที่ 15 พฤศจิกายน 2569 ณ ห้องประชุมเทศบาลฯ กลุ่มเป้าหมายคือพนักงานเทศบาลจำนวน 50 คน งบประมาณ 15,000 บาท';
+            document.getElementById('builder-format').value = 'ใช้ภาษาราชการที่ถูกต้องตามระเบียบงานสารบรรณ แบ่งเนื้อหาเป็น 1. เรื่องเดิม 2. ข้อเท็จจริง 3. ข้อพิจารณาและข้อเสนอ';
+            updateLivePrompt();
+        }
+
+        function resetBuilder() {
+            document.getElementById('builder-role').value = '';
+            document.getElementById('builder-task').value = '';
+            document.getElementById('builder-context').value = '';
+            document.getElementById('builder-format').value = '';
+            updateLivePrompt();
+        }
+
+        function loadIntoBuilder(promptIdx) {
+            const mod = workshopsData[currentModuleIndex];
+            const p = mod.prompts[promptIdx];
+            if (!p) return;
+
+            document.getElementById('builder-role').value = p.role;
+            document.getElementById('builder-task').value = p.task;
+            document.getElementById('builder-context').value = p.context;
+            document.getElementById('builder-format').value = p.format;
+            updateLivePrompt();
+            switchMainView('builder');
+            showToast('โหลดตัวอย่างเข้าสู่เครื่องมือสร้าง Prompt แล้ว ปรับแก้ข้อมูลได้ทันที!');
+        }
+
+        function updateLivePrompt() {
+            const role = document.getElementById('builder-role').value.trim() || '[ระบุตำแหน่ง/บทบาท]';
+            const task = document.getElementById('builder-task').value.trim() || '[ระบุงานที่ต้องการให้ AI ทำ]';
+            const context = document.getElementById('builder-context').value.trim() || '[ระบุเรื่อง วัน เวลา สถานที่ วัตถุประสงค์]';
+            const format = document.getElementById('builder-format').value.trim() || '[ระบุรูปแบบภาษาราชการและโครงสร้างผลลัพธ์]';
+
+            // Check for potential 13-digit Thai ID or 10-digit phone number (PDPA Guard)
+            const idRegex = /\b\d{13}\b|\b\d-\d{4}-\d{5}-\d{2}-\d\b|\b0[689]\d{8}\b/;
+            const pdpaWarning = document.getElementById('pdpa-warning');
+            if (idRegex.test(context)) {
+                pdpaWarning.classList.remove('hidden');
+            } else {
+                pdpaWarning.classList.add('hidden');
+            }
+
+            const finalPrompt = `สวมบทบาทเป็น: ${role}\n\nงานที่ต้องการให้ทำ: ${task}\n\nบริบทและข้อมูลสำคัญ:\n${context}\n\nรูปแบบภาษาและผลลัพธ์ที่ต้องการ:\n${format}`;
+            document.getElementById('builder-output-box').textContent = finalPrompt;
+        }
+
+        function copyGeneratedPrompt() {
+            const text = document.getElementById('builder-output-box').textContent;
+            copyToClipboard(text, 'คัดลอก Prompt จากเครื่องมือสร้างเรียบร้อยแล้ว!');
+        }
+
+        // ==========================================
+        // 7. POST-TEST QUIZ LOGIC
+        // ==========================================
+        function renderQuiz() {
+            const container = document.getElementById('quiz-questions-container');
+            container.innerHTML = quizQuestions.map((item, qIdx) => `
+                <div class="p-5 rounded-xl bg-slate-50 border border-slate-200 space-y-3" id="quiz-block-${qIdx}">
+                    <h4 class="font-heading font-bold text-slate-900 text-base">${item.q}</h4>
+                    <div class="space-y-2">
+                        ${item.options.map((opt, oIdx) => `
+                            <label class="flex items-center gap-3 p-3 rounded-xl bg-white border border-slate-200 hover:border-blue-400 cursor-pointer transition">
+                                <input type="radio" name="quiz-q-${qIdx}" value="${oIdx}" onchange="selectQuizAnswer(${qIdx}, ${oIdx})" class="w-4 h-4 text-blue-600 focus:ring-blue-500">
+                                <span class="text-sm text-slate-700">${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div id="quiz-exp-${qIdx}" class="hidden p-3.5 rounded-xl text-xs leading-relaxed"></div>
+                </div>
+            `).join('');
+        }
+
+        function selectQuizAnswer(qIdx, oIdx) {
+            userQuizAnswers[qIdx] = oIdx;
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            quizQuestions.forEach((item, qIdx) => {
+                const expEl = document.getElementById(`quiz-exp-${qIdx}`);
+                const selected = userQuizAnswers[qIdx];
+                expEl.classList.remove('hidden');
+
+                if (selected === item.correct) {
+                    score++;
+                    expEl.className = "p-3.5 rounded-xl text-xs leading-relaxed bg-emerald-100/80 text-emerald-950 border border-emerald-300";
+                    expEl.innerHTML = `<strong>ถูกต้อง!</strong> ${item.explanation}`;
+                } else {
+                    expEl.className = "p-3.5 rounded-xl text-xs leading-relaxed bg-rose-100/80 text-rose-950 border border-rose-300";
+                    expEl.innerHTML = `<strong>คำตอบที่ถูกต้องคือ: ${item.options[item.correct]}</strong><br>${item.explanation}`;
+                }
+            });
+
+            const banner = document.getElementById('quiz-score-banner');
+            banner.classList.remove('hidden');
+            banner.innerHTML = `คะแนนของคุณ: <span class="text-lg font-bold text-emerald-700">${score} / ${quizQuestions.length} คะแนน</span> (${Math.round((score/quizQuestions.length)*100)}%) — ${score >= 4 ? 'ยอดเยี่ยม! คุณพร้อมนำ AI ไปประยุกต์ใช้ในหน่วยงานอย่างปลอดภัยแล้ว' : 'แนะนำให้ทบทวนเนื้อหาโครงสร้าง Prompt และข้อควรระวัง PDPA อีกครั้ง'}`;
+            showToast(`ตรวจคำตอบเรียบร้อย! คุณได้ ${score}/${quizQuestions.length} คะแนน`);
+        }
+
+        function resetQuiz() {
+            userQuizAnswers = {};
+            document.getElementById('quiz-score-banner').classList.add('hidden');
+            renderQuiz();
+        }
+
+        // ==========================================
+        // 8. CLIPBOARD & TOAST UTILITIES
+        // ==========================================
+        function copyCurrentStructure() {
+            const mod = workshopsData[currentModuleIndex];
+            const text = `${mod.structureTitle}\n` + mod.structureItems.map(i => `- ${i.label}: ${i.text}`).join('\n');
+            copyToClipboard(text, 'คัดลอกโครงสร้าง Prompt เรียบร้อยแล้ว!');
+        }
+
+        function copyTextDecode(encodedStr, customMsg = 'คัดลอกคำสั่ง Prompt เรียบร้อยแล้ว!') {
+            const text = decodeURIComponent(encodedStr);
+            copyToClipboard(text, customMsg);
+        }
+
+        function copyToClipboard(text, message) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast(message);
+            } catch (err) {
+                showToast('ไม่สามารถคัดลอกได้ กรุณาเลือกข้อความแล้วกด Ctrl+C');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        let toastTimeout;
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Initialize on load
+        window.onload = initApp;
+    </script>
+</body>
+</html>

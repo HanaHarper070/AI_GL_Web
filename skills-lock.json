@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "skills": {
+    "design-taste-frontend": {
+      "source": "Leonxlnx/taste-skill",
+      "sourceType": "github",
+      "skillPath": "skills/taste-skill/SKILL.md",
+      "computedHash": "6ac8ba6089dcbc303744a507a4587113c5d845ca2f658b3ce2b0b5eab108fb0d"
+    },
+    "web-security-audit": {
+      "source": "local/security-audit",
+      "sourceType": "workspace",
+      "skillPath": ".agents/skills/web-security-audit/SKILL.md"
+    },
+    "web-qa-tester": {
+      "source": "local/qa-tester",
+      "sourceType": "workspace",
+      "skillPath": ".agents/skills/web-qa-tester/SKILL.md"
+    },
+    "web-accessibility-audit": {
+      "source": "local/accessibility-audit",
+      "sourceType": "workspace",
+      "skillPath": ".agents/skills/web-accessibility-audit/SKILL.md"
+    }
+  }
+}

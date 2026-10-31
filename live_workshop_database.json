@@ -1,0 +1,194 @@
+{
+  "Master": [
+    {
+      "timestamp": "31/10/2026 16:41:59",
+      "fullName": "นายสมศักดิ์ มุ่งมั่นพัฒนา",
+      "position": "นักจัดการงานทั่วไปชำนาญการ",
+      "department": "สำนักปลัดเทศบาล",
+      "organization": "เทศบาลตำบลเมืองใหม่ จ.เชียงใหม่",
+      "batch": "รุ่นที่ 1",
+      "quizScore": 5,
+      "quizTotal": 5,
+      "quizPassed": true,
+      "certificateId": "AI-LG-2569-8B74",
+      "savedPromptsCount": 4
+    },
+    {
+      "timestamp": "31/10/2026 16:42:11",
+      "fullName": "นางสาววิไลวรรณ รักการงาน",
+      "position": "นักวิเคราะห์นโยบายและแผน",
+      "department": "กองยุทธศาสตร์",
+      "organization": "อบจ.นครราชสีมา",
+      "batch": "รุ่นที่ 2",
+      "quizScore": 5,
+      "quizTotal": 5,
+      "quizPassed": true,
+      "certificateId": "AI-LG-2569-2001",
+      "savedPromptsCount": 3
+    },
+    {
+      "timestamp": "31/10/2026 16:42:11",
+      "fullName": "นายประเสริฐ รุ่งเรือง",
+      "position": "นักวิชาการคลังชำนาญการ",
+      "department": "กองคลัง",
+      "organization": "เทศบาลเมืองหัวหิน",
+      "batch": "รุ่นที่ 3",
+      "quizScore": 4,
+      "quizTotal": 5,
+      "quizPassed": true,
+      "certificateId": "AI-LG-2569-3001",
+      "savedPromptsCount": 5
+    },
+    {
+      "timestamp": "31/10/2026 16:42:11",
+      "fullName": "นางกัญญารัตน์ สถิตสุข",
+      "position": "นิติกรชำนาญการ",
+      "department": "สำนักปลัด",
+      "organization": "อบต.บางแก้ว",
+      "batch": "รุ่นที่ 4",
+      "quizScore": 5,
+      "quizTotal": 5,
+      "quizPassed": true,
+      "certificateId": "AI-LG-2569-4001",
+      "savedPromptsCount": 2
+    },
+    {
+      "timestamp": "31/10/2026 16:50:09",
+      "fullName": "นายสมศักดิ์ มุ่งมั่นพัฒนา",
+      "position": "นักจัดการงานทั่วไปชำนาญการ",
+      "department": "สำนักปลัดเทศบาล",
+      "organization": "เทศบาลตำบลเมืองใหม่ จ.เชียงใหม่",
+      "batch": "รุ่นที่ 1",
+      "quizScore": null,
+      "quizTotal": 5,
+      "quizPassed": false,
+      "certificateId": "AI-LG-2569-5172",
+      "savedPromptsCount": 0
+    },
+    {
+      "timestamp": "31/10/2026 16:52:13",
+      "fullName": "นายสมศักดิ์ มุ่งมั่นพัฒนา",
+      "position": "นักจัดการงานทั่วไปชำนาญการ",
+      "department": "สำนักปลัดเทศบาล",
+      "organization": "เทศบาลตำบลเมืองใหม่ จ.เชียงใหม่",
+      "batch": "รุ่นที่ 1",
+      "quizScore": null,
+      "quizTotal": 5,
+      "quizPassed": false,
+      "certificateId": "AI-LG-2569-5172",
+      "savedPromptsCount": 0
+    },
+    {
+      "timestamp": "31/10/2026 17:12:47",
+      "fullName": "นายปิยะพงษ์ วงค์ขันแก้ว",
+      "position": "นักจัดการงานทั่วไปชำนาญการ",
+      "department": "สำนักปลัดเทศบาล",
+      "organization": "เทศบาลตำบลเมืองใหม่ จ.เชียงราย",
+      "batch": "รุ่นที่ 1",
+      "quizScore": 5,
+      "quizTotal": 5,
+      "quizPassed": true,
+      "certificateId": "AI-LG-2569-5172",
+      "savedPromptsCount": 3
+    }
+  ],
+  "รุ่นที่ 1": [
+    {
+      "timestamp": "31/10/2026 16:41:59",
+      "fullName": "นายสมศักดิ์ มุ่งมั่นพัฒนา",
+      "position": "นักจัดการงานทั่วไปชำนาญการ",
+      "department": "สำนักปลัดเทศบาล",
+      "organization": "เทศบาลตำบลเมืองใหม่ จ.เชียงใหม่",
+      "batch": "รุ่นที่ 1",
+      "quizScore": 5,
+      "quizTotal": 5,
+      "quizPassed": true,
+      "certificateId": "AI-LG-2569-8B74",
+      "savedPromptsCount": 4
+    },
+    {
+      "timestamp": "31/10/2026 16:50:09",
+      "fullName": "นายสมศักดิ์ มุ่งมั่นพัฒนา",
+      "position": "นักจัดการงานทั่วไปชำนาญการ",
+      "department": "สำนักปลัดเทศบาล",
+      "organization": "เทศบาลตำบลเมืองใหม่ จ.เชียงใหม่",
+      "batch": "รุ่นที่ 1",
+      "quizScore": null,
+      "quizTotal": 5,
+      "quizPassed": false,
+      "certificateId": "AI-LG-2569-5172",
+      "savedPromptsCount": 0
+    },
+    {
+      "timestamp": "31/10/2026 16:52:13",
+      "fullName": "นายสมศักดิ์ มุ่งมั่นพัฒนา",
+      "position": "นักจัดการงานทั่วไปชำนาญการ",
+      "department": "สำนักปลัดเทศบาล",
+      "organization": "เทศบาลตำบลเมืองใหม่ จ.เชียงใหม่",
+      "batch": "รุ่นที่ 1",
+      "quizScore": null,
+      "quizTotal": 5,
+      "quizPassed": false,
+      "certificateId": "AI-LG-2569-5172",
+      "savedPromptsCount": 0
+    },
+    {
+      "timestamp": "31/10/2026 17:12:47",
+      "fullName": "นายปิยะพงษ์ วงค์ขันแก้ว",
+      "position": "นักจัดการงานทั่วไปชำนาญการ",
+      "department": "สำนักปลัดเทศบาล",
+      "organization": "เทศบาลตำบลเมืองใหม่ จ.เชียงราย",
+      "batch": "รุ่นที่ 1",
+      "quizScore": 5,
+      "quizTotal": 5,
+      "quizPassed": true,
+      "certificateId": "AI-LG-2569-5172",
+      "savedPromptsCount": 3
+    }
+  ],
+  "รุ่นที่ 2": [
+    {
+      "timestamp": "31/10/2026 16:42:11",
+      "fullName": "นางสาววิไลวรรณ รักการงาน",
+      "position": "นักวิเคราะห์นโยบายและแผน",
+      "department": "กองยุทธศาสตร์",
+      "organization": "อบจ.นครราชสีมา",
+      "batch": "รุ่นที่ 2",
+      "quizScore": 5,
+      "quizTotal": 5,
+      "quizPassed": true,
+      "certificateId": "AI-LG-2569-2001",
+      "savedPromptsCount": 3
+    }
+  ],
+  "รุ่นที่ 3": [
+    {
+      "timestamp": "31/10/2026 16:42:11",
+      "fullName": "นายประเสริฐ รุ่งเรือง",
+      "position": "นักวิชาการคลังชำนาญการ",
+      "department": "กองคลัง",
+      "organization": "เทศบาลเมืองหัวหิน",
+      "batch": "รุ่นที่ 3",
+      "quizScore": 4,
+      "quizTotal": 5,
+      "quizPassed": true,
+      "certificateId": "AI-LG-2569-3001",
+      "savedPromptsCount": 5
+    }
+  ],
+  "รุ่นที่ 4": [
+    {
+      "timestamp": "31/10/2026 16:42:11",
+      "fullName": "นางกัญญารัตน์ สถิตสุข",
+      "position": "นิติกรชำนาญการ",
+      "department": "สำนักปลัด",
+      "organization": "อบต.บางแก้ว",
+      "batch": "รุ่นที่ 4",
+      "quizScore": 5,
+      "quizTotal": 5,
+      "quizPassed": true,
+      "certificateId": "AI-LG-2569-4001",
+      "savedPromptsCount": 2
+    }
+  ]
+}
